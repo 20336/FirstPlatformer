@@ -20,6 +20,8 @@ public class MyWorld extends World
         
         addObject(new Ground(), getWidth()/2, getHeight()-15);
         addObject(new Player(), 100, getHeight()-100);
+        addObject(new Creature(), getWidth()/2, getHeight()-100);
+        addObject(new Sword(), getWidth()/4, getHeight()-100);
         
         addObject(new Platform(), getWidth()/4, getHeight()/4);
         addObject(new Platform(), getWidth()/4, getHeight() -150);

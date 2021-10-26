@@ -7,10 +7,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version (a version number or a date)
  */
 public class Player extends Actor
-{   private int dX = 4;
+{   private int enemyHit = 0;
+    private int dX = 4;
     private int dY = 2;
     private int acceleration = 1;
     private int jumpStrength = 15;
+    
+    private int swordAttackDelayTime;
+    private int swordAttackDelayCounter;
     
     private GreenfootImage image1;
     private GreenfootImage image2;
@@ -21,6 +25,11 @@ public class Player extends Actor
     
     public Player()
     {
+        swordAttackDelayTime = 1;
+        swordAttackDelayCounter = 0;
+        
+        
+        
         image1 = new GreenfootImage("KnightRight.png");
         image2 = new GreenfootImage("KnightLeft.png");
         image3 = new GreenfootImage("KnightWalkingRight.png");
@@ -38,6 +47,12 @@ public class Player extends Actor
         checkKeys();
         checkForFall();
         pickUpSword();
+        checkForEnoughHits();
+    }
+    
+    public void swordAttackDelayTime(int swordAttackTime)
+    {
+        swordAttackDelayTime = swordAttackTime;
     }
     
     /**
@@ -47,7 +62,6 @@ public class Player extends Actor
     {
         setLocation(getX()+dX, getY());
     }
-    
     /**
      * Allows the character to move left.
      */
@@ -55,7 +69,6 @@ public class Player extends Actor
     {
         setLocation(getX()-dX, getY());
     }
-    
     /**
      * Sets how fast the character will fall.
      */
@@ -114,10 +127,9 @@ public class Player extends Actor
             animateJump();
         }
         
-        if(Greenfoot.isKeyDown("space") && isOnGround() || Greenfoot.isKeyDown("space") && isOnPlatform())
+        if(Greenfoot.isKeyDown("space") && isTouching(Creature.class))
         {
-            jump();
-            animateJump();
+            attack();
         }
     }
     
@@ -136,6 +148,31 @@ public class Player extends Actor
         }
     }
     
+    
+    public void attack()
+    {
+        enemyHit++;
+        
+    }
+    
+    public void checkForEnoughHits()
+    {
+        if(enemyHit >= 30 && swordAttackDelayCounter >= swordAttackDelayTime)
+        {
+            removeTouching(Enemy.class);
+            
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Checks if the plager .
+     */
     public void checkForFall()
     {
         if(isOnGround() || isOnPlatform())
@@ -149,6 +186,9 @@ public class Player extends Actor
         }
     }
     
+    /**
+     * Sets how the player will jump.
+     */
     public void jump()
     {
        dY = -jumpStrength; 

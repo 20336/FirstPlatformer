@@ -16,4 +16,9 @@ public class Creature extends Enemy
     {
         // Add your action code here.
     }
+    
+    public void health()
+    {
+        
+    }
 }
