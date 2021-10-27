@@ -10,6 +10,8 @@ public class Dragon extends Enemy
 {
     private int yMovement = Greenfoot.getRandomNumber(30)-10;
     private int acceleration = 1;
+    
+    private int damage = 0;
     /**
      * Act - do whatever the Dragon wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -27,4 +29,6 @@ public class Dragon extends Enemy
            yMovement += acceleration;
         }
     }
+    
+    
 }

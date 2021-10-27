@@ -14,6 +14,15 @@ public class Fireball extends Projectile
      */
     public void act()
     {
-        // Add your action code here.
+        killPlayer();
+    }
+    
+    public void killPlayer()
+    {
+        if(isTouching(Player.class))
+        {
+            removeTouching(Player.class);
+            Greenfoot.stop();
+        }
     }
 }
