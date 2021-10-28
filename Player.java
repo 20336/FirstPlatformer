@@ -8,6 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Player extends Actor
 {   private int enemyHit = 0;
+    public static int enemiesKilled;
+    
     private int dX = 4;
     private int dY = 2;
     private int acceleration = 1;
@@ -115,18 +117,20 @@ public class Player extends Actor
         {
             setToStand();
         }
-        if(Greenfoot.isKeyDown("w") && isOnGround() || Greenfoot.isKeyDown("space") && isOnPlatform())
+        if(Greenfoot.isKeyDown("w") && isOnGround() || Greenfoot.isKeyDown("w") && isOnPlatform())
         {
             jump();
             animateJump();
         }
         
-        if(Greenfoot.isKeyDown("space") && isTouching(Creature.class) && !isAttacking)
+        if(Greenfoot.isKeyDown("space") && !isAttacking)
         {
             attack();
             isAttacking = true;
+            hitRightAnimate();
+            hitLeftAnimate();
         }
-        if(!Greenfoot.isKeyDown("space") && !isTouching(Creature.class) && isAttacking)
+        if(!Greenfoot.isKeyDown("space") && isAttacking)
         {
             isAttacking = false;
         }
@@ -150,7 +154,10 @@ public class Player extends Actor
     
     public void attack()
     {
-        enemyHit++;
+         if(isTouching(Creature.class))
+         {
+            enemyHit++; 
+         }
     }
     
     public void checkForEnoughHits()
@@ -158,6 +165,8 @@ public class Player extends Actor
         if(enemyHit >= 4)
         {
             removeTouching(Enemy.class);
+            enemiesKilled++;
+            enemyHit = 0;
         }
     }
     
@@ -192,9 +201,27 @@ public class Player extends Actor
        fall();
     }
     
-    public void hitAnimate()
+    public void hitRightAnimate()
     {
-         
+         if(getImage() == image1)
+        {
+            setImage(image7);
+        }
+        else if(getImage() == image7)
+        {
+            setImage(image1);
+        }
+    }
+    public void hitLeftAnimate()
+    {
+        if(getImage() == image2)
+        {
+            setImage(image8);
+        }
+        else if(getImage() == image8)
+        {
+            setImage(image2);
+        }
     }
     
     public void setToLand()

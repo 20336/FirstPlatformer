@@ -12,13 +12,40 @@ public class Dragon extends Enemy
     private int acceleration = 1;
     
     private int damage = 0;
+    
+    private int fireballDelay;
+    private int fireballDelayCount;
+    
+    public Dragon()
+    {
+        fireballDelay = 80;
+        fireballDelayCount = 0;
+    }
+    
+    public void fireballDelay(int fireballShoot)
+    {
+        fireballDelay = fireballShoot;
+    }
+    
     /**
      * Act - do whatever the Dragon wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
     {
-        moveUpAndDown();
+        shootFireball();
+        fireballDelayCount++;
+    }
+    
+    
+    
+    public void shootFireball()
+    {
+        if(fireballDelayCount >= fireballDelay)
+        {
+            getWorld().addObject(new Fireball(), getX()-10, getY()-55);
+            fireballDelayCount = 0;
+        }
     }
     
     public void moveUpAndDown()

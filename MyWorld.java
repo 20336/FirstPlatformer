@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MyWorld extends World
 {
-
+    
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -19,11 +19,30 @@ public class MyWorld extends World
         super(600, 400, 1);
         
         addObject(new Ground(), getWidth()/2, getHeight()-15);
-        addObject(new Player(), 100, getHeight()-100);
-        addObject(new Creature(), getWidth()/2, getHeight()-100);
-        addObject(new Sword(), getWidth()/4, getHeight()-100);
+        addObject(new Platform(), getWidth()/4, getHeight()/3);
+        addObject(new Platform(), getWidth()/3, getHeight() -160);
         
-        addObject(new Platform(), getWidth()/4, getHeight()/4);
-        addObject(new Platform(), getWidth()/4, getHeight() -150);
+        
+        addObject(new Player(), 100, getHeight()-90);
+        
+        addObject(new Sword(), getWidth()/4, getHeight()-100);
+        for(int i = 0; i < 8; i ++)
+        {
+            addObject(new Creature(), Greenfoot.getRandomNumber(600), getHeight()-70);
+        }
+        
+    }
+    
+    public void act()
+    {
+        checkIfAllCreaturesDead();
+    }
+    
+    public void checkIfAllCreaturesDead()
+    {
+        if(Player.enemiesKilled == 4)
+        {
+            addObject(new Dragon(), getWidth()-50, getHeight()/2);
+        }
     }
 }
