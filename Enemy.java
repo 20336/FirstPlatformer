@@ -8,21 +8,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Enemy extends Actor
 {
-    public int damage = 0;
+    public int damage;
     /**
      * Act - do whatever the Enemy wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
     {
-        // Add your action code here.
+        
     }
     
-    public void arrowDamage()
-    {
-        if(isTouching(Arrow.class))
-        {
-            damage++;
-        }
-    }
+    
 }

@@ -10,12 +10,17 @@ public class Player extends Actor
 {   private int enemyHit = 0;
     public static int enemiesKilled;
     
+    private boolean bowEquipped;
+    
     private int dX = 4;
     private int dY = 2;
     private int acceleration = 1;
     private int jumpStrength = 15;
     
     private boolean isAttacking;
+    
+    private int jumpDelayTime;
+    private int jumpDelayCounter;
     
     private GreenfootImage image1;
     private GreenfootImage image2;
@@ -28,6 +33,8 @@ public class Player extends Actor
     
     public Player()
     {
+        jumpDelayTime = 20;
+        jumpDelayCounter = 0;        
         image1 = new GreenfootImage("KnightRight.png");
         image2 = new GreenfootImage("KnightLeft.png");
         image3 = new GreenfootImage("KnightWalkingRight.png");
@@ -47,9 +54,15 @@ public class Player extends Actor
         checkKeys();
         checkForFall();
         pickUpSword();
+        pickUpBow();
         checkForEnoughHits();
+        jumpDelayCounter++;
     }
     
+    public void jumpDelayTime(int jumpDelay)
+    {
+        jumpDelayTime = jumpDelay;
+    }
     
     /**
      * Allows the character to move Right.
@@ -126,9 +139,10 @@ public class Player extends Actor
         if(Greenfoot.isKeyDown("space") && !isAttacking)
         {
             attack();
+            shootArrow();
             isAttacking = true;
-            hitRightAnimate();
-            hitLeftAnimate();
+            attackRightAnimate();
+            attackLeftAnimate();
         }
         if(!Greenfoot.isKeyDown("space") && isAttacking)
         {
@@ -136,22 +150,24 @@ public class Player extends Actor
         }
     }
     
-    public void pickUpSword()
-    {
-        if(isTouching(Sword.class))
-        {
-            removeTouching(Sword.class);
-            
-            image1 = new GreenfootImage("KnightWithSwordRight.png");
-            image2 = new GreenfootImage("KnightWithSwordLeft.png");
-            image3 = new GreenfootImage("KnightWithSwordWalkingRight.png");
-            image4 = new GreenfootImage("KnightWithSwordWalkingLeft.png");
-            image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
-            image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
-        }
-    }
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * Attacking enemy.
+     */
+    /**
+     * Tallies up the amount of times the enemy(creature) is hit.
+     */
     public void attack()
     {
          if(isTouching(Creature.class))
@@ -160,13 +176,27 @@ public class Player extends Actor
          }
     }
     
+    /**
+     * Sees if the enemy has taken enough hits, if so then the enemy dies.
+     */
     public void checkForEnoughHits()
     {
-        if(enemyHit >= 4)
+        if(enemyHit >= 8)
         {
             removeTouching(Enemy.class);
             enemiesKilled++;
             enemyHit = 0;
+        }
+    }
+    
+    /**
+     * Checks if the player is holding the bow and if so then it shoots an arrow.
+     */
+    public void shootArrow()
+    {
+        if(bowEquipped)
+        {
+            getWorld().addObject(new Arrow(), getX()+2, getY()-5);
         }
     }
     
@@ -175,9 +205,8 @@ public class Player extends Actor
     
     
     
-    
     /**
-     * Checks if the plager .
+     * Checks if the plager is on the ground or on the platform, if not then the player will fall.
      */
     public void checkForFall()
     {
@@ -197,11 +226,63 @@ public class Player extends Actor
      */
     public void jump()
     {
-       dY = -jumpStrength; 
-       fall();
+       if(jumpDelayCounter >= jumpDelayTime)
+       {
+           dY = -jumpStrength; 
+           fall();  
+           jumpDelayCounter = 0;
+       }
     }
     
-    public void hitRightAnimate()
+    
+    
+    
+    
+    
+    
+    
+    
+    public void pickUpSword()
+    {
+        if(isTouching(Sword.class))
+        {
+            bowEquipped = false;
+            removeTouching(Sword.class);
+            
+            image1 = new GreenfootImage("KnightWithSwordRight.png");
+            image2 = new GreenfootImage("KnightWithSwordLeft.png");
+            image3 = new GreenfootImage("KnightWithSwordWalkingRight.png");
+            image4 = new GreenfootImage("KnightWithSwordWalkingLeft.png");
+            image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
+            image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
+        }
+    }
+    public void pickUpBow()
+    {
+        if(isTouching(Bow.class))
+        {
+            bowEquipped = true;
+            removeTouching(Bow.class);
+            
+            image1 = new GreenfootImage("KnightWithBowRight.png");
+            image2 = new GreenfootImage("KnightWithBowLeft.png");
+            image3 = new GreenfootImage("KnightWithBowWalkingRight.png");
+            image4 = new GreenfootImage("KnightWithBowWalkingLeft.png");
+            image5 = new GreenfootImage("KnightWithBowJumpingRight.png");
+            image6 = new GreenfootImage("KnightWithBowJumpingLeft.png");
+            image7 = new GreenfootImage("KnightWithBowUpRight.png");
+            image8 = new GreenfootImage("KnightWithBowUpLeft.png");
+        }
+    }
+    
+    
+    /*
+     * Animations?
+     */
+    /**
+     * Animates the hit when facing right.
+     */
+    public void attackRightAnimate()
     {
          if(getImage() == image1)
         {
@@ -212,7 +293,11 @@ public class Player extends Actor
             setImage(image1);
         }
     }
-    public void hitLeftAnimate()
+    
+    /**
+     * Animates the hit when facing left.
+     */
+    public void attackLeftAnimate()
     {
         if(getImage() == image2)
         {
@@ -224,6 +309,9 @@ public class Player extends Actor
         }
     }
     
+    /**
+     * Sets the player to the plain standing image after jumping.
+     */
     public void setToLand()
     {
         if(getImage() == image5)
@@ -235,6 +323,10 @@ public class Player extends Actor
             setImage(image2);
         }
     }
+    
+    /**
+     * Sets the player to the plain standing image after running.
+     */
     public void setToStand()
     {
         if(getImage() == image3)
@@ -246,6 +338,10 @@ public class Player extends Actor
             setImage(image2);
         }
     }
+    
+    /**
+     * Animates the jump.
+     */
     public void animateJump()
     {
         if(getImage() == image1 || getImage() == image3)
@@ -257,6 +353,10 @@ public class Player extends Actor
             setImage(image6);
         }
     }
+    
+    /**
+     * Animates the walk towards the right.
+     */
     public void animateRightWalk()
     {
         if(getImage() == image1)
@@ -269,6 +369,9 @@ public class Player extends Actor
         }
     }
     
+    /**
+     * Animates the walk towards the left.
+     */
     public void animateLeftWalk()
     {
         if(getImage() == image2)
@@ -279,5 +382,6 @@ public class Player extends Actor
         {
             setImage(image2);
         }
+        
     }
 }

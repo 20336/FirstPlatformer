@@ -35,9 +35,9 @@ public class Dragon extends Enemy
     {
         shootFireball();
         fireballDelayCount++;
+        arrowDamage();
+        checkForEnoughDamage();
     }
-    
-    
     
     public void shootFireball()
     {
@@ -57,5 +57,21 @@ public class Dragon extends Enemy
         }
     }
     
+    public void arrowDamage()
+    {
+        if(isTouching(Arrow.class))
+        {
+            damage++;
+            removeTouching(Arrow.class);
+        }
+    }
+    
+    public void checkForEnoughDamage()
+    {
+        if(damage == 20)
+        {
+            getWorld().removeObject(this);
+        }
+    }
     
 }

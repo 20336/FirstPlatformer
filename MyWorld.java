@@ -40,9 +40,11 @@ public class MyWorld extends World
     
     public void checkIfAllCreaturesDead()
     {
-        if(Player.enemiesKilled == 4)
+        if(Player.enemiesKilled == 8)
         {
             addObject(new Dragon(), getWidth()-50, getHeight()/2);
+            addObject(new Bow(), getWidth()/4, getHeight()-100);
+            Player.enemiesKilled = 0;
         }
     }
 }
