@@ -18,9 +18,12 @@ public class Player extends Actor
     private int jumpStrength = 15;
     
     private boolean isAttacking;
+    private boolean arrowShot;
     
     private int jumpDelayTime;
     private int jumpDelayCounter;
+    private int shootDelayTime;
+    private int shootDelayCounter;
     
     private GreenfootImage image1;
     private GreenfootImage image2;
@@ -30,11 +33,16 @@ public class Player extends Actor
     private GreenfootImage image6;
     private GreenfootImage image7;
     private GreenfootImage image8;
+    private GreenfootImage image9;
+    private GreenfootImage image10;
     
     public Player()
     {
         jumpDelayTime = 20;
-        jumpDelayCounter = 0;        
+        jumpDelayCounter = 0;   
+        shootDelayTime = 10;
+        shootDelayCounter = 0;  
+        
         image1 = new GreenfootImage("KnightRight.png");
         image2 = new GreenfootImage("KnightLeft.png");
         image3 = new GreenfootImage("KnightWalkingRight.png");
@@ -43,6 +51,8 @@ public class Player extends Actor
         image6 = new GreenfootImage("KnightJumpingLeft.png");
         image7 = new GreenfootImage("KnightWithSwordUpRight.png");
         image8 = new GreenfootImage("KnightWithSwordUpLeft.png");
+        image9 = new GreenfootImage("KnightWithBowUpRight.png");
+        image10 = new GreenfootImage("KnightWithBowUpLeft.png");
     }
     
     /**
@@ -57,13 +67,25 @@ public class Player extends Actor
         pickUpBow();
         checkForEnoughHits();
         jumpDelayCounter++;
+        shootDelayCounter++;
     }
     
     public void jumpDelayTime(int jumpDelay)
     {
         jumpDelayTime = jumpDelay;
     }
+    public void shootDelayTime(int shootDelay)
+    {
+        shootDelayTime = shootDelay;
+    }
     
+    
+    
+    
+    
+    /*
+     * Player movement and falling speed.
+     */
     /**
      * Allows the character to move Right.
      */
@@ -87,6 +109,10 @@ public class Player extends Actor
        dY += acceleration;
     }
     
+    
+    
+    
+    
     /**
      * Detects if the player is on the platform.
      */
@@ -95,7 +121,6 @@ public class Player extends Actor
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Platform.class);
         return under != null;
     }
-
     /**
      * Detects if the player is on the ground.
      */
@@ -110,6 +135,12 @@ public class Player extends Actor
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
         return under != null;
     }
+    
+    
+    
+    
+    
+    
     
     /**
      * Checks if a key is being pressed.
@@ -194,17 +225,27 @@ public class Player extends Actor
      */
     public void shootArrow()
     {
-        if(bowEquipped)
+        if(bowEquipped && shootDelayCounter >= shootDelayTime)
         {
             getWorld().addObject(new Arrow(), getX()+2, getY()-5);
+            shootDelayCounter = 0;
+            arrowShot = true;
+        }
+    }
+    
+    public void arrowShotCounter()
+    {
+        if(arrowShot = true)
+        {
+            shootDelayCounter++;
         }
     }
     
     
     
-    
-    
-    
+    /*
+     * Jumping and fall.
+     */
     /**
      * Checks if the plager is on the ground or on the platform, if not then the player will fall.
      */
@@ -264,14 +305,13 @@ public class Player extends Actor
             bowEquipped = true;
             removeTouching(Bow.class);
             
+            
             image1 = new GreenfootImage("KnightWithBowRight.png");
             image2 = new GreenfootImage("KnightWithBowLeft.png");
             image3 = new GreenfootImage("KnightWithBowWalkingRight.png");
             image4 = new GreenfootImage("KnightWithBowWalkingLeft.png");
             image5 = new GreenfootImage("KnightWithBowJumpingRight.png");
             image6 = new GreenfootImage("KnightWithBowJumpingLeft.png");
-            image7 = new GreenfootImage("KnightWithBowUpRight.png");
-            image8 = new GreenfootImage("KnightWithBowUpLeft.png");
         }
     }
     
@@ -279,6 +319,18 @@ public class Player extends Actor
     /*
      * Animations?
      */
+    
+    /**
+     * Animates the hit when facing right.
+     */
+    public void bowLift()
+    {
+         if(getImage() == image1)
+        {
+            setImage(image9);
+        }
+    }
+    
     /**
      * Animates the hit when facing right.
      */
