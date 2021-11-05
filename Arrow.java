@@ -8,6 +8,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Arrow extends Projectile
 {   private int dX = 4;
+    
+    
+    
     /**
      * Act - do whatever the Arrow wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
@@ -20,6 +23,6 @@ public class Arrow extends Projectile
     
     public void move()
     {
-        setLocation(getX()+ dX, getY());
+            setLocation(getX()+ dX, getY());
     }
 }

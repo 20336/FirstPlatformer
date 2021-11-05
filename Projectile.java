@@ -19,7 +19,7 @@ public class Projectile extends Actor
     
     public void goOffScreen()
     {
-        if(getX() <= 0)
+        if(isAtEdge())
         {
             getWorld().removeObject(this);
         }

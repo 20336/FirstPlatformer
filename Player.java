@@ -11,6 +11,7 @@ public class Player extends Actor
     public static int enemiesKilled;
     
     private boolean bowEquipped;
+    private boolean swordEquipped;
     
     private int dX = 4;
     private int dY = 2;
@@ -20,10 +21,14 @@ public class Player extends Actor
     private boolean isAttacking;
     private boolean arrowShot;
     
+    public static boolean facingRight;
+    public static boolean facingLeft;
+
+    
     private int jumpDelayTime;
     private int jumpDelayCounter;
-    private int shootDelayTime;
-    private int shootDelayCounter;
+    private int arrowDelayTime;
+    private int arrowDelayCounter;
     
     private GreenfootImage image1;
     private GreenfootImage image2;
@@ -38,10 +43,13 @@ public class Player extends Actor
     
     public Player()
     {
-        jumpDelayTime = 20;
+        jumpDelayTime = 50;
         jumpDelayCounter = 0;   
-        shootDelayTime = 10;
-        shootDelayCounter = 0;  
+        arrowDelayTime = 50;
+        arrowDelayCounter = 0;
+        
+        arrowShot = false;
+        
         
         image1 = new GreenfootImage("KnightRight.png");
         image2 = new GreenfootImage("KnightLeft.png");
@@ -66,17 +74,43 @@ public class Player extends Actor
         pickUpSword();
         pickUpBow();
         checkForEnoughHits();
+        arrowShotFalse();
+        
         jumpDelayCounter++;
-        shootDelayCounter++;
+        arrowDelayCounter++;
     }
+    
+    
+    
+    
+    public void rightFacing()
+    {
+        if(getImage() == image1 || getImage() == image3 || getImage() == image5 || getImage() == image7 || getImage() == image9)
+        {
+            facingRight = true;
+        }
+    }
+    public void leftFacing()
+    {
+        if(getImage() == image2 || getImage() == image4 || getImage() == image6 || getImage() == image8 || getImage() == image10)
+        {
+            facingLeft = true;
+        }
+    }
+    
+    
+    
+    
+    
+    
     
     public void jumpDelayTime(int jumpDelay)
     {
         jumpDelayTime = jumpDelay;
     }
-    public void shootDelayTime(int shootDelay)
+    public void arrowDelayTime(int arrowDelay)
     {
-        shootDelayTime = shootDelay;
+        arrowDelayTime = arrowDelay;
     }
     
     
@@ -130,12 +164,6 @@ public class Player extends Actor
         return under != null;
     }
     
-    public boolean checkIfNearEnemy()
-    {
-        Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
-        return under != null;
-    }
-    
     
     
     
@@ -161,21 +189,20 @@ public class Player extends Actor
         {
             setToStand();
         }
-        if(Greenfoot.isKeyDown("w") && isOnGround() || Greenfoot.isKeyDown("w") && isOnPlatform())
+        if(Greenfoot.isKeyDown("space") && isOnGround() || Greenfoot.isKeyDown("space") && isOnPlatform())
         {
             jump();
             animateJump();
         }
         
-        if(Greenfoot.isKeyDown("space") && !isAttacking)
+        if(Greenfoot.isKeyDown("s") && !isAttacking)
         {
             attack();
             shootArrow();
             isAttacking = true;
-            attackRightAnimate();
-            attackLeftAnimate();
+            attackingAnimate();
         }
-        if(!Greenfoot.isKeyDown("space") && isAttacking)
+        if(!Greenfoot.isKeyDown("s") && isAttacking)
         {
             isAttacking = false;
         }
@@ -212,7 +239,7 @@ public class Player extends Actor
      */
     public void checkForEnoughHits()
     {
-        if(enemyHit >= 8)
+        if(enemyHit >= 1)
         {
             removeTouching(Enemy.class);
             enemiesKilled++;
@@ -225,21 +252,26 @@ public class Player extends Actor
      */
     public void shootArrow()
     {
-        if(bowEquipped && shootDelayCounter >= shootDelayTime)
+        if(bowEquipped && !arrowShot)
         {
+            
             getWorld().addObject(new Arrow(), getX()+2, getY()-5);
-            shootDelayCounter = 0;
+            arrowDelayCounter = 0;
+            bowLift();
             arrowShot = true;
         }
     }
     
-    public void arrowShotCounter()
+    public void arrowShotFalse()
     {
-        if(arrowShot = true)
+        if(arrowDelayCounter >= arrowDelayTime)
         {
-            shootDelayCounter++;
+            arrowShot = false;
+            bowDown();
         }
     }
+    
+    
     
     
     
@@ -282,12 +314,18 @@ public class Player extends Actor
     
     
     
-    
+    /*
+     * Equipping weapons.
+     */
+    /**
+     * Changes the information when the sword is "picked up".
+     */    
     public void pickUpSword()
     {
         if(isTouching(Sword.class))
         {
             bowEquipped = false;
+            swordEquipped = true;
             removeTouching(Sword.class);
             
             image1 = new GreenfootImage("KnightWithSwordRight.png");
@@ -298,10 +336,15 @@ public class Player extends Actor
             image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
         }
     }
+    
+    /**
+     * Changes the information when the bow is "picked up".
+     */
     public void pickUpBow()
     {
         if(isTouching(Bow.class))
         {
+            swordEquipped = false;
             bowEquipped = true;
             removeTouching(Bow.class);
             
@@ -316,20 +359,60 @@ public class Player extends Actor
     }
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /*
      * Animations?
      */
+    /**
+     * If the sword is equipped then the sword attacking animation can play.
+     */
+    public void attackingAnimate()
+    {
+        if(swordEquipped)
+        {
+            attackRightAnimate();
+            attackLeftAnimate();  
+        }
+    }
     
     /**
-     * Animates the hit when facing right.
+     * Sets the image for when the bow needs to be held up.
      */
     public void bowLift()
     {
-         if(getImage() == image1)
+        if(getImage() == image1)
         {
             setImage(image9);
         }
+        else if(getImage() == image2)
+        {
+            setImage(image10);
+        }
     }
+    
+    /**
+     * Sets the image for when the bow needs to be held down.
+     */
+    public void bowDown()
+    {
+        if(getImage() == image9)
+        {
+            setImage(image1);
+        }
+        else if(getImage() == image10)
+        {
+            setImage(image2);
+        }
+    }
+    
     
     /**
      * Animates the hit when facing right.

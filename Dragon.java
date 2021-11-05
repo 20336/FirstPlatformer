@@ -16,10 +16,16 @@ public class Dragon extends Enemy
     private int fireballDelay;
     private int fireballDelayCount;
     
+    private GreenfootImage image1;
+    private GreenfootImage image2;
+    
     public Dragon()
     {
         fireballDelay = 80;
         fireballDelayCount = 0;
+        
+        image1 = new GreenfootImage("Dragon.png");
+        image2 = new GreenfootImage("DragonAngry.png");
     }
     
     public void fireballDelay(int fireballShoot)
@@ -45,6 +51,7 @@ public class Dragon extends Enemy
         {
             getWorld().addObject(new Fireball(), getX()-10, getY()-55);
             fireballDelayCount = 0;
+            setAngryDragon();
         }
     }
     
@@ -74,4 +81,15 @@ public class Dragon extends Enemy
         }
     }
     
+    public void setAngryDragon()
+    {
+        if(getImage() == image1)
+        {
+            setImage(image2);
+        }
+        else
+        {
+            setImage(image1);
+        }
+    }
 }
