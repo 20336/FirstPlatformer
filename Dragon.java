@@ -49,9 +49,9 @@ public class Dragon extends Enemy
     {
         if(fireballDelayCount >= fireballDelay)
         {
+            setAngryDragon();
             getWorld().addObject(new Fireball(), getX()-10, getY()-55);
             fireballDelayCount = 0;
-            setAngryDragon();
         }
     }
     

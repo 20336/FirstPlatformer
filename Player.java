@@ -29,6 +29,8 @@ public class Player extends Actor
     private int jumpDelayCounter;
     private int arrowDelayTime;
     private int arrowDelayCounter;
+    private int swordAttackTime;
+    private int swordAttackCounter;
     
     private GreenfootImage image1;
     private GreenfootImage image2;
@@ -43,11 +45,13 @@ public class Player extends Actor
     
     public Player()
     {
-        jumpDelayTime = 50;
+        jumpDelayTime = 40;
         jumpDelayCounter = 0;   
         arrowDelayTime = 50;
         arrowDelayCounter = 0;
-        
+        swordAttackTime = 20;
+        swordAttackCounter = 0;
+    
         arrowShot = false;
         
         
@@ -78,6 +82,7 @@ public class Player extends Actor
         
         jumpDelayCounter++;
         arrowDelayCounter++;
+        swordAttackCounter++;
     }
     
     
@@ -97,22 +102,6 @@ public class Player extends Actor
             facingLeft = true;
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    public void jumpDelayTime(int jumpDelay)
-    {
-        jumpDelayTime = jumpDelay;
-    }
-    public void arrowDelayTime(int arrowDelay)
-    {
-        arrowDelayTime = arrowDelay;
-    }
-    
     
     
     
@@ -205,6 +194,7 @@ public class Player extends Actor
         if(!Greenfoot.isKeyDown("s") && isAttacking)
         {
             isAttacking = false;
+            attackingAnimate();
         }
     }
     
@@ -228,9 +218,10 @@ public class Player extends Actor
      */
     public void attack()
     {
-         if(isTouching(Creature.class))
+         if(swordAttackCounter >= swordAttackTime && isTouching(Creature.class) && swordEquipped)
          {
             enemyHit++; 
+            swordAttackCounter = 0;
          }
     }
     
@@ -270,6 +261,10 @@ public class Player extends Actor
             bowDown();
         }
     }
+    
+    
+    
+    
     
     
     
@@ -379,7 +374,7 @@ public class Player extends Actor
         if(swordEquipped)
         {
             attackRightAnimate();
-            attackLeftAnimate();  
+            attackLeftAnimate();
         }
     }
     
@@ -419,7 +414,7 @@ public class Player extends Actor
      */
     public void attackRightAnimate()
     {
-         if(getImage() == image1)
+        if(getImage() == image1)
         {
             setImage(image7);
         }
@@ -427,6 +422,7 @@ public class Player extends Actor
         {
             setImage(image1);
         }
+        
     }
     
     /**
