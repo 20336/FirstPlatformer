@@ -184,14 +184,14 @@ public class Player extends Actor
             animateJump();
         }
         
-        if(Greenfoot.isKeyDown("s") && !isAttacking)
+        if(Greenfoot.isKeyDown("enter") && !isAttacking)
         {
             attack();
             shootArrow();
             isAttacking = true;
             attackingAnimate();
         }
-        if(!Greenfoot.isKeyDown("s") && isAttacking)
+        if(!Greenfoot.isKeyDown("enter") && isAttacking)
         {
             isAttacking = false;
             attackingAnimate();
@@ -230,7 +230,7 @@ public class Player extends Actor
      */
     public void checkForEnoughHits()
     {
-        if(enemyHit >= 1)
+        if(enemyHit >= 8)
         {
             removeTouching(Enemy.class);
             enemiesKilled++;

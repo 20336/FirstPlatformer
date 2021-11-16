@@ -19,8 +19,10 @@ public class MyWorld extends World
         super(600, 400, 1);
         
         addObject(new Ground(), getWidth()/2, getHeight()-15);
-        addObject(new Platform(), getWidth()/4, getHeight()/3);
-        addObject(new Platform(), getWidth()/3, getHeight() -160);
+        addObject(new Platform(), 125, getHeight()/3);
+        addObject(new Platform(), getWidth()-250, 120);
+        addObject(new Platform(), 200, getHeight() -160);
+        addObject(new Platform(), getWidth()-200, getHeight() -160);
         
         
         addObject(new Player(), 100, getHeight()-90);
