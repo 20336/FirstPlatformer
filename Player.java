@@ -9,6 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Player extends Actor
 {   private int enemyHit = 0;
     public static int enemiesKilled;
+    public static int spawnDragon;
     
     private boolean bowEquipped;
     private boolean swordEquipped;
@@ -234,6 +235,7 @@ public class Player extends Actor
         {
             removeTouching(Enemy.class);
             enemiesKilled++;
+            spawnDragon++;
             enemyHit = 0;
         }
     }

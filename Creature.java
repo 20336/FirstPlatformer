@@ -19,11 +19,6 @@ public class Creature extends Enemy
         checkForFall();
     }
     
-    public void health()
-    {
-        
-    }
-    
     public void fall()
     {
        setLocation(getX(), getY()+dY);

@@ -28,25 +28,42 @@ public class MyWorld extends World
         addObject(new Player(), 100, getHeight()-90);
         
         addObject(new Sword(), getWidth()/4, getHeight()-100);
-        for(int i = 0; i < 8; i ++)
-        {
-            addObject(new Creature(), Greenfoot.getRandomNumber(600), getHeight()-70);
-        }
+        
+
+       
+        addObject(new Creature(), getWidth()/5, 105);
+        addObject(new Creature(), getWidth()/3, getHeight()-188);
+        addObject(new Creature(), getWidth()-190, getHeight()-188);
+        addObject(new Creature(), getWidth()-270, 92);
+        addObject(new Creature(), getWidth()-150, getHeight()-77);
         
     }
     
     public void act()
     {
         checkIfAllCreaturesDead();
+        spawnMoreCreatures();
     }
     
     public void checkIfAllCreaturesDead()
     {
-        if(Player.enemiesKilled == 8)
+        if(Player.spawnDragon == 8)
         {
             addObject(new Dragon(), getWidth()-50, getHeight()/2);
             addObject(new Bow(), getWidth()/4, getHeight()-100);
-            Player.enemiesKilled = 0;
+            Player.spawnDragon = 0;
         }
+    }
+    
+    public void spawnMoreCreatures()
+    {
+        if(Player.enemiesKilled == 5)
+        {
+            addObject(new Creature(), getWidth()/5, 105);
+            
+            addObject(new Creature(), getWidth()-190, getHeight()-188);
+            addObject(new Creature(), getWidth()-270, 92);
+            Player.enemiesKilled = 0;
+        } 
     }
 }
