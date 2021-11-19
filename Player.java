@@ -129,8 +129,9 @@ public class Player extends Actor
      */
     public void fall()
     {
-       setLocation(getX(), getY()+dY);
-       dY += acceleration;
+        detectPlatform();
+        setLocation(getX(), getY()+dY);
+        dY += acceleration;
     }
     
     
@@ -154,7 +155,25 @@ public class Player extends Actor
         return under != null;
     }
     
-    
+    public void detectPlatform()
+    {
+        for(int i = 0; i < dY; i++)
+        {
+            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
+            if(under != null)
+            {
+                dY = i;
+            }
+        }
+        for(int i = 0; i < dY; i++)
+        {
+            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Ground.class);
+            if(under != null)
+            {
+                dY = i;
+            }
+        }
+    }
     
     
     

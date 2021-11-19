@@ -18,6 +18,7 @@ public class MyWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1);
         
+        
         addObject(new Ground(), getWidth()/2, getHeight()-15);
         addObject(new Platform(), 125, getHeight()/3);
         addObject(new Platform(), getWidth()-250, 120);
@@ -25,16 +26,16 @@ public class MyWorld extends World
         addObject(new Platform(), getWidth()-200, getHeight() -160);
         
         
-        addObject(new Player(), 100, getHeight()-90);
+        addObject(new Player(), 100, getHeight()-97);
         
         addObject(new Sword(), getWidth()/4, getHeight()-100);
         
 
        
-        addObject(new Creature(), getWidth()/5, 105);
-        addObject(new Creature(), getWidth()/3, getHeight()-188);
-        addObject(new Creature(), getWidth()-190, getHeight()-188);
-        addObject(new Creature(), getWidth()-270, 92);
+        addObject(new Creature(), getWidth()/5, 106);
+        addObject(new Creature(), getWidth()/3, getHeight()-187);
+        addObject(new Creature(), getWidth()-190, getHeight()-187);
+        addObject(new Creature(), getWidth()-270, 93);
         addObject(new Creature(), getWidth()-150, getHeight()-77);
         
     }

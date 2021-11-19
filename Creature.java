@@ -19,10 +19,12 @@ public class Creature extends Enemy
         checkForFall();
     }
     
+    
     public void fall()
     {
-       setLocation(getX(), getY()+dY);
-       dY += acceleration;
+        detectPlatform();
+        setLocation(getX(), getY()+dY);
+        dY += acceleration;
     }
     
     public void checkForFall()
@@ -52,5 +54,20 @@ public class Creature extends Enemy
     {
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
         return under != null;
+    }
+    
+    /**
+     * Detects how far the platform is from the bottom of the player.
+     */
+    public void detectPlatform()
+    {
+        for(int i = 0; i < dY; i++)
+        {
+            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
+            if(under != null)
+            {
+                dY = i;
+            }
+        }
     }
 }
