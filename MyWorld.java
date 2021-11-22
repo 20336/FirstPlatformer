@@ -26,31 +26,29 @@ public class MyWorld extends World
         addObject(new Platform(), getWidth()-200, getHeight() -160);
         
         
-        addObject(new Player(), 100, getHeight()-97);
+        
         
         addObject(new Sword(), getWidth()/4, getHeight()-100);
         
-
-       
-        addObject(new Creature(), getWidth()/5, 106);
-        addObject(new Creature(), getWidth()/3, getHeight()-187);
-        addObject(new Creature(), getWidth()-190, getHeight()-187);
-        addObject(new Creature(), getWidth()-270, 93);
-        addObject(new Creature(), getWidth()-150, getHeight()-77);
+        addObject(new Creature(getWidth()/5), getWidth()/5, 106);
+        addObject(new Creature(getWidth()/3), getWidth()/3, getHeight()-187);
+        addObject(new Creature(getWidth()-190), getWidth()-190, getHeight()-187);
+        addObject(new Creature(getWidth()-270), getWidth()-270, 93);
+        addObject(new Creature(getWidth()-150), getWidth()-150, getHeight()-77);
         
+        addObject(new Player(), 100, getHeight()-97);        
     }
     
     public void act()
     {
         checkIfAllCreaturesDead();
-        spawnMoreCreatures();
     }
     
     public void checkIfAllCreaturesDead()
     {
-        if(Player.spawnDragon == 8)
+        if(Player.spawnDragon == 5)
         {
-            addObject(new Dragon(), getWidth()-50, getHeight()/2);
+            addObject(new Dragon(getHeight()/2), getWidth()-50, getHeight()/2);
             addObject(new Bow(), getWidth()/4, getHeight()-100);
             Player.spawnDragon = 0;
         }
@@ -60,10 +58,10 @@ public class MyWorld extends World
     {
         if(Player.enemiesKilled == 5)
         {
-            addObject(new Creature(), getWidth()/5, 105);
+            addObject(new Creature(getWidth()/5), getWidth()/5, 105);
             
-            addObject(new Creature(), getWidth()-190, getHeight()-188);
-            addObject(new Creature(), getWidth()-270, 92);
+            addObject(new Creature(getWidth()-190), getWidth()-190, getHeight()-188);
+            addObject(new Creature(getWidth()-270), getWidth()-270, 92);
             Player.enemiesKilled = 0;
         } 
     }

@@ -44,8 +44,7 @@ public class Player extends Actor
     private GreenfootImage image9;
     private GreenfootImage image10;
     
-    public Player()
-    {
+    public Player(){
         jumpDelayTime = 40;
         jumpDelayCounter = 0;   
         arrowDelayTime = 50;
@@ -72,8 +71,7 @@ public class Player extends Actor
      * Act - do whatever the Player wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    public void act()
-    {
+    public void act(){
         checkKeys();
         checkForFall();
         pickUpSword();
@@ -89,17 +87,13 @@ public class Player extends Actor
     
     
     
-    public void rightFacing()
-    {
-        if(getImage() == image1 || getImage() == image3 || getImage() == image5 || getImage() == image7 || getImage() == image9)
-        {
+    public void rightFacing(){
+        if(getImage() == image1 || getImage() == image3 || getImage() == image5 || getImage() == image7 || getImage() == image9){
             facingRight = true;
         }
     }
-    public void leftFacing()
-    {
-        if(getImage() == image2 || getImage() == image4 || getImage() == image6 || getImage() == image8 || getImage() == image10)
-        {
+    public void leftFacing(){
+        if(getImage() == image2 || getImage() == image4 || getImage() == image6 || getImage() == image8 || getImage() == image10){
             facingLeft = true;
         }
     }
@@ -113,22 +107,19 @@ public class Player extends Actor
     /**
      * Allows the character to move Right.
      */
-    public void moveRight()
-    {
+    public void moveRight(){
         setLocation(getX()+dX, getY());
     }
     /**
      * Allows the character to move left.
      */
-    public void moveLeft()
-    {
+    public void moveLeft(){
         setLocation(getX()-dX, getY());
     }
     /**
      * Sets how fast the character will fall.
      */
-    public void fall()
-    {
+    public void fall(){
         detectPlatform();
         setLocation(getX(), getY()+dY);
         dY += acceleration;
@@ -141,38 +132,35 @@ public class Player extends Actor
     /**
      * Detects if the player is on the platform.
      */
-    public boolean isOnPlatform()
-    {
+    public boolean isOnPlatform(){
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Platform.class);
         return under != null;
     }
     /**
      * Detects if the player is on the ground.
      */
-    public boolean isOnGround()
-    {
+    public boolean isOnGround(){
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
         return under != null;
     }
     
-    public void detectPlatform()
-    {
-        for(int i = 0; i < dY; i++)
-        {
+    public void detectPlatform(){
+        for(int i = 0; i < dY; i++){
             Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
-            if(under != null)
-            {
+            if(under != null){
                 dY = i;
             }
         }
-        for(int i = 0; i < dY; i++)
-        {
+        for(int i = 0; i < dY; i++){
             Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Ground.class);
-            if(under != null)
-            {
+            if(under != null){
                 dY = i;
             }
         }
+    }
+    
+    public void onlyFallThroughTop(){
+        
     }
     
     
@@ -182,37 +170,29 @@ public class Player extends Actor
     /**
      * Checks if a key is being pressed.
      */
-    public void checkKeys()
-    {   
-        if(Greenfoot.isKeyDown("d"))
-        {
+    public void checkKeys(){   
+        if(Greenfoot.isKeyDown("d")){
             moveRight();
             animateRightWalk();
-        }
-        else if(Greenfoot.isKeyDown("a"))
-        {
+        }else if(Greenfoot.isKeyDown("a")){
             moveLeft();
             animateLeftWalk();
-        }
-        else
-        {
+        }else{
             setToStand();
         }
-        if(Greenfoot.isKeyDown("space") && isOnGround() || Greenfoot.isKeyDown("space") && isOnPlatform())
-        {
+        
+        if(Greenfoot.isKeyDown("space") && isOnGround() || Greenfoot.isKeyDown("space") && isOnPlatform()){
             jump();
             animateJump();
         }
         
-        if(Greenfoot.isKeyDown("enter") && !isAttacking)
-        {
+        if(Greenfoot.isKeyDown("enter") && !isAttacking){
             attack();
             shootArrow();
             isAttacking = true;
             attackingAnimate();
         }
-        if(!Greenfoot.isKeyDown("enter") && isAttacking)
-        {
+        if(!Greenfoot.isKeyDown("enter") && isAttacking){
             isAttacking = false;
             attackingAnimate();
         }
@@ -236,10 +216,8 @@ public class Player extends Actor
     /**
      * Tallies up the amount of times the enemy(creature) is hit.
      */
-    public void attack()
-    {
-         if(swordAttackCounter >= swordAttackTime && isTouching(Creature.class) && swordEquipped)
-         {
+    public void attack(){
+         if(swordAttackCounter >= swordAttackTime && isTouching(Creature.class) && swordEquipped){
             enemyHit++; 
             swordAttackCounter = 0;
          }
@@ -248,10 +226,8 @@ public class Player extends Actor
     /**
      * Sees if the enemy has taken enough hits, if so then the enemy dies.
      */
-    public void checkForEnoughHits()
-    {
-        if(enemyHit >= 8)
-        {
+    public void checkForEnoughHits(){
+        if(enemyHit >= 4){
             removeTouching(Enemy.class);
             enemiesKilled++;
             spawnDragon++;
@@ -262,10 +238,8 @@ public class Player extends Actor
     /**
      * Checks if the player is holding the bow and if so then it shoots an arrow.
      */
-    public void shootArrow()
-    {
-        if(bowEquipped && !arrowShot)
-        {
+    public void shootArrow(){
+        if(bowEquipped && !arrowShot){
             
             getWorld().addObject(new Arrow(), getX()+2, getY()-5);
             arrowDelayCounter = 0;
@@ -274,10 +248,12 @@ public class Player extends Actor
         }
     }
     
-    public void arrowShotFalse()
-    {
-        if(arrowDelayCounter >= arrowDelayTime)
-        {
+    /**
+     * Sets the boolean arrowShot to false after a certain amount of time.
+     * Makes the player put the bow dow to show that the play is ready to shoot the bow again.
+     */
+    public void arrowShotFalse(){
+        if(arrowDelayCounter >= arrowDelayTime){
             arrowShot = false;
             bowDown();
         }
@@ -297,15 +273,11 @@ public class Player extends Actor
     /**
      * Checks if the plager is on the ground or on the platform, if not then the player will fall.
      */
-    public void checkForFall()
-    {
-        if(isOnGround() || isOnPlatform())
-        {
+    public void checkForFall(){
+        if(isOnGround() || isOnPlatform()){
             dY = 0;
             setToLand();
-        }
-        else
-        {  
+        }else{  
             fall();
         }
     }
@@ -313,10 +285,8 @@ public class Player extends Actor
     /**
      * Sets how the player will jump.
      */
-    public void jump()
-    {
-       if(jumpDelayCounter >= jumpDelayTime)
-       {
+    public void jump(){
+       if(jumpDelayCounter >= jumpDelayTime){
            dY = -jumpStrength; 
            fall();  
            jumpDelayCounter = 0;
@@ -336,10 +306,8 @@ public class Player extends Actor
     /**
      * Changes the information when the sword is "picked up".
      */    
-    public void pickUpSword()
-    {
-        if(isTouching(Sword.class))
-        {
+    public void pickUpSword(){
+        if(isTouching(Sword.class)){
             bowEquipped = false;
             swordEquipped = true;
             removeTouching(Sword.class);
@@ -356,10 +324,8 @@ public class Player extends Actor
     /**
      * Changes the information when the bow is "picked up".
      */
-    public void pickUpBow()
-    {
-        if(isTouching(Bow.class))
-        {
+    public void pickUpBow(){
+        if(isTouching(Bow.class)){
             swordEquipped = false;
             bowEquipped = true;
             removeTouching(Bow.class);
@@ -390,10 +356,8 @@ public class Player extends Actor
     /**
      * If the sword is equipped then the sword attacking animation can play.
      */
-    public void attackingAnimate()
-    {
-        if(swordEquipped)
-        {
+    public void attackingAnimate(){
+        if(swordEquipped){
             attackRightAnimate();
             attackLeftAnimate();
         }
@@ -402,14 +366,10 @@ public class Player extends Actor
     /**
      * Sets the image for when the bow needs to be held up.
      */
-    public void bowLift()
-    {
-        if(getImage() == image1)
-        {
+    public void bowLift(){
+        if(getImage() == image1){
             setImage(image9);
-        }
-        else if(getImage() == image2)
-        {
+        }else if(getImage() == image2){
             setImage(image10);
         }
     }
@@ -417,46 +377,32 @@ public class Player extends Actor
     /**
      * Sets the image for when the bow needs to be held down.
      */
-    public void bowDown()
-    {
-        if(getImage() == image9)
-        {
+    public void bowDown(){
+        if(getImage() == image9){
             setImage(image1);
-        }
-        else if(getImage() == image10)
-        {
+        }else if(getImage() == image10){
             setImage(image2);
         }
     }
     
-    
     /**
      * Animates the hit when facing right.
      */
-    public void attackRightAnimate()
-    {
-        if(getImage() == image1)
-        {
+    public void attackRightAnimate(){
+        if(getImage() == image1){
             setImage(image7);
-        }
-        else if(getImage() == image7)
-        {
+        }else if(getImage() == image7){
             setImage(image1);
         }
-        
     }
     
     /**
      * Animates the hit when facing left.
      */
-    public void attackLeftAnimate()
-    {
-        if(getImage() == image2)
-        {
+    public void attackLeftAnimate(){
+        if(getImage() == image2){
             setImage(image8);
-        }
-        else if(getImage() == image8)
-        {
+        }else if(getImage() == image8){
             setImage(image2);
         }
     }
@@ -464,14 +410,10 @@ public class Player extends Actor
     /**
      * Sets the player to the plain standing image after jumping.
      */
-    public void setToLand()
-    {
-        if(getImage() == image5)
-        {
+    public void setToLand(){
+        if(getImage() == image5){
             setImage(image1);
-        }
-        else if(getImage() == image6)
-        { 
+        }else if(getImage() == image6){ 
             setImage(image2);
         }
     }
@@ -479,14 +421,10 @@ public class Player extends Actor
     /**
      * Sets the player to the plain standing image after running.
      */
-    public void setToStand()
-    {
-        if(getImage() == image3)
-        {
+    public void setToStand(){
+        if(getImage() == image3){
             setImage(image1);
-        }
-        else if(getImage() == image4)
-        { 
+        }else if(getImage() == image4){ 
             setImage(image2);
         }
     }
@@ -494,14 +432,10 @@ public class Player extends Actor
     /**
      * Animates the jump.
      */
-    public void animateJump()
-    {
-        if(getImage() == image1 || getImage() == image3)
-        {
+    public void animateJump(){
+        if(getImage() == image1 || getImage() == image3){
             setImage(image5);
-        }
-        if(getImage() == image2 ||getImage() == image4)
-        {
+        }else if(getImage() == image2 ||getImage() == image4){
             setImage(image6);
         }
     }
@@ -509,14 +443,10 @@ public class Player extends Actor
     /**
      * Animates the walk towards the right.
      */
-    public void animateRightWalk()
-    {
-        if(getImage() == image1)
-        {
+    public void animateRightWalk(){
+        if(getImage() == image1){
             setImage(image3);
-        }
-        else
-        {
+        }else{
             setImage(image1);
         }
     }
@@ -524,16 +454,11 @@ public class Player extends Actor
     /**
      * Animates the walk towards the left.
      */
-    public void animateLeftWalk()
-    {
-        if(getImage() == image2)
-        {
+    public void animateLeftWalk(){
+        if(getImage() == image2){
             setImage(image4);
-        }
-        else
-        {
+        }else{
             setImage(image2);
         }
-        
     }
 }

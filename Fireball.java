@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Fireball extends Projectile
 {
-    private int dX = Greenfoot.getRandomNumber(3+1);
-    private int dY = Greenfoot.getRandomNumber(3+1);
+    private int dX = Greenfoot.getRandomNumber(3)+1;
+    private int dY = Greenfoot.getRandomNumber(3)+1;
     /**
      * Act - do whatever the Fireball wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
