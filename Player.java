@@ -22,9 +22,11 @@ public class Player extends Actor
     private boolean isAttacking;
     private boolean arrowShot;
     
-    public static boolean facingRight;
-    public static boolean facingLeft;
+    private boolean facingRight;
 
+    
+    GreenfootImage[] walkRight = new GreenfootImage[8];
+    GreenfootImage[] walkLeft = new GreenfootImage[8];
     
     private int jumpDelayTime;
     private int jumpDelayCounter;
@@ -35,14 +37,14 @@ public class Player extends Actor
     
     private GreenfootImage image1;
     private GreenfootImage image2;
-    private GreenfootImage image3;
-    private GreenfootImage image4;
+    
     private GreenfootImage image5;
     private GreenfootImage image6;
     private GreenfootImage image7;
     private GreenfootImage image8;
     private GreenfootImage image9;
     private GreenfootImage image10;
+    int animationCounter = 0;
     
     public Player(){
         jumpDelayTime = 40;
@@ -54,11 +56,11 @@ public class Player extends Actor
     
         arrowShot = false;
         
+        initAnimationSprites();
         
         image1 = new GreenfootImage("KnightRight.png");
         image2 = new GreenfootImage("KnightLeft.png");
-        image3 = new GreenfootImage("KnightWalkingRight.png");
-        image4 = new GreenfootImage("KnightWalkingLeft.png");
+        
         image5 = new GreenfootImage("KnightJumpingRight.png");
         image6 = new GreenfootImage("KnightJumpingLeft.png");
         image7 = new GreenfootImage("KnightWithSwordUpRight.png");
@@ -88,14 +90,10 @@ public class Player extends Actor
     
     
     public void rightFacing(){
-        if(getImage() == image1 || getImage() == image3 || getImage() == image5 || getImage() == image7 || getImage() == image9){
-            facingRight = true;
-        }
+        facingRight = true;
     }
     public void leftFacing(){
-        if(getImage() == image2 || getImage() == image4 || getImage() == image6 || getImage() == image8 || getImage() == image10){
-            facingLeft = true;
-        }
+        facingRight = false;
     }
     
     
@@ -109,12 +107,14 @@ public class Player extends Actor
      */
     public void moveRight(){
         setLocation(getX()+dX, getY());
+        animateWalkRight();
     }
     /**
      * Allows the character to move left.
      */
     public void moveLeft(){
         setLocation(getX()-dX, getY());
+        animateWalkLeft();
     }
     /**
      * Sets how fast the character will fall.
@@ -143,7 +143,9 @@ public class Player extends Actor
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
         return under != null;
     }
-    
+    /**
+     * Detects whether or not there is a platform beneath the player.
+     */
     public void detectPlatform(){
         for(int i = 0; i < dY; i++){
             Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
@@ -173,10 +175,8 @@ public class Player extends Actor
     public void checkKeys(){   
         if(Greenfoot.isKeyDown("d")){
             moveRight();
-            animateRightWalk();
         }else if(Greenfoot.isKeyDown("a")){
             moveLeft();
-            animateLeftWalk();
         }else{
             setToStand();
         }
@@ -314,8 +314,7 @@ public class Player extends Actor
             
             image1 = new GreenfootImage("KnightWithSwordRight.png");
             image2 = new GreenfootImage("KnightWithSwordLeft.png");
-            image3 = new GreenfootImage("KnightWithSwordWalkingRight.png");
-            image4 = new GreenfootImage("KnightWithSwordWalkingLeft.png");
+            
             image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
             image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
         }
@@ -333,8 +332,8 @@ public class Player extends Actor
             
             image1 = new GreenfootImage("KnightWithBowRight.png");
             image2 = new GreenfootImage("KnightWithBowLeft.png");
-            image3 = new GreenfootImage("KnightWithBowWalkingRight.png");
-            image4 = new GreenfootImage("KnightWithBowWalkingLeft.png");
+            
+            
             image5 = new GreenfootImage("KnightWithBowJumpingRight.png");
             image6 = new GreenfootImage("KnightWithBowJumpingLeft.png");
         }
@@ -346,9 +345,20 @@ public class Player extends Actor
     
     
     
+    public void initAnimationSprites(){
+        for(int i = 0; i < 8; i++){
+            String filename = "KnightWalkRight" +i+ ".png";
+            walkRight[i] = new GreenfootImage(filename);
+        }
+        for(int i = 0; i < 8; i++){
+            String filename = "KnightWalkRight" +i+ ".png";
+            walkLeft[i] = new GreenfootImage(filename);
+            walkLeft[i].mirrorHorizontally();
+        }
+    }
     
     
-    
+
     
     /*
      * Animations?
@@ -422,20 +432,23 @@ public class Player extends Actor
      * Sets the player to the plain standing image after running.
      */
     public void setToStand(){
-        if(getImage() == image3){
+        if(facingRight = true){
             setImage(image1);
-        }else if(getImage() == image4){ 
+        }
+        else if(facingRight = false){
             setImage(image2);
         }
+        
     }
     
     /**
      * Animates the jump.
      */
     public void animateJump(){
-        if(getImage() == image1 || getImage() == image3){
+        if(facingRight = true){
             setImage(image5);
-        }else if(getImage() == image2 ||getImage() == image4){
+        }
+        else if(facingRight = false){
             setImage(image6);
         }
     }
@@ -443,22 +456,15 @@ public class Player extends Actor
     /**
      * Animates the walk towards the right.
      */
-    public void animateRightWalk(){
-        if(getImage() == image1){
-            setImage(image3);
-        }else{
-            setImage(image1);
-        }
+    public void animateWalkRight(){
+        setImage(walkRight[animationCounter++ % 8]);
+        rightFacing();
     }
-    
     /**
      * Animates the walk towards the left.
      */
-    public void animateLeftWalk(){
-        if(getImage() == image2){
-            setImage(image4);
-        }else{
-            setImage(image2);
-        }
+    public void animateWalkLeft(){
+        setImage(walkLeft[animationCounter++ % 8]);
+        leftFacing();
     }
 }
