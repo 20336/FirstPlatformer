@@ -55,6 +55,7 @@ public class Player extends Actor
         swordAttackCounter = 0;
     
         arrowShot = false;
+        facingRight = true;
         
         initAnimationSprites();
         
@@ -89,13 +90,6 @@ public class Player extends Actor
     
     
     
-    public void rightFacing(){
-        facingRight = true;
-    }
-    public void leftFacing(){
-        facingRight = false;
-    }
-    
     
     
     
@@ -108,6 +102,7 @@ public class Player extends Actor
     public void moveRight(){
         setLocation(getX()+dX, getY());
         animateWalkRight();
+        facingRight = true;
     }
     /**
      * Allows the character to move left.
@@ -320,6 +315,12 @@ public class Player extends Actor
         }
     }
     
+    public void swordImages(){
+        if(swordEquipped = true){
+            
+        }
+    }
+    
     /**
      * Changes the information when the bow is "picked up".
      */
@@ -349,11 +350,13 @@ public class Player extends Actor
         for(int i = 0; i < 8; i++){
             String filename = "KnightWalkRight" +i+ ".png";
             walkRight[i] = new GreenfootImage(filename);
+            facingRight = false;
         }
         for(int i = 0; i < 8; i++){
             String filename = "KnightWalkRight" +i+ ".png";
             walkLeft[i] = new GreenfootImage(filename);
             walkLeft[i].mirrorHorizontally();
+            facingRight = false;
         }
     }
     
@@ -421,9 +424,9 @@ public class Player extends Actor
      * Sets the player to the plain standing image after jumping.
      */
     public void setToLand(){
-        if(getImage() == image5){
+        if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image5){
             setImage(image1);
-        }else if(getImage() == image6){ 
+        }else if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image6){ 
             setImage(image2);
         }
     }
@@ -432,23 +435,20 @@ public class Player extends Actor
      * Sets the player to the plain standing image after running.
      */
     public void setToStand(){
-        if(facingRight = true){
+        if(getImage() == walkRight[animationCounter++ % 8]){
             setImage(image1);
-        }
-        else if(facingRight = false){
+        }else if(getImage() == walkLeft[animationCounter++ % 8]){
             setImage(image2);
         }
-        
     }
     
     /**
      * Animates the jump.
      */
     public void animateJump(){
-        if(facingRight = true){
+        if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image1){
             setImage(image5);
-        }
-        else if(facingRight = false){
+        }else if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image2){
             setImage(image6);
         }
     }
@@ -458,13 +458,11 @@ public class Player extends Actor
      */
     public void animateWalkRight(){
         setImage(walkRight[animationCounter++ % 8]);
-        rightFacing();
     }
     /**
      * Animates the walk towards the left.
      */
     public void animateWalkLeft(){
         setImage(walkLeft[animationCounter++ % 8]);
-        leftFacing();
     }
 }
