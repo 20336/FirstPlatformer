@@ -22,7 +22,6 @@ public class Player extends Actor
     private boolean isAttacking;
     private boolean arrowShot;
     
-    private boolean facingRight;
 
     
     GreenfootImage[] walkRight = new GreenfootImage[8];
@@ -55,7 +54,7 @@ public class Player extends Actor
         swordAttackCounter = 0;
     
         arrowShot = false;
-        facingRight = true;
+        
         
         initAnimationSprites();
         
@@ -102,7 +101,6 @@ public class Player extends Actor
     public void moveRight(){
         setLocation(getX()+dX, getY());
         animateWalkRight();
-        facingRight = true;
     }
     /**
      * Allows the character to move left.
@@ -350,13 +348,11 @@ public class Player extends Actor
         for(int i = 0; i < 8; i++){
             String filename = "KnightWalkRight" +i+ ".png";
             walkRight[i] = new GreenfootImage(filename);
-            facingRight = false;
         }
         for(int i = 0; i < 8; i++){
             String filename = "KnightWalkRight" +i+ ".png";
             walkLeft[i] = new GreenfootImage(filename);
             walkLeft[i].mirrorHorizontally();
-            facingRight = false;
         }
     }
     
@@ -426,8 +422,6 @@ public class Player extends Actor
     public void setToLand(){
         if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image5){
             setImage(image1);
-        }else if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image6){ 
-            setImage(image2);
         }
     }
     
@@ -435,20 +429,38 @@ public class Player extends Actor
      * Sets the player to the plain standing image after running.
      */
     public void setToStand(){
-        if(getImage() == walkRight[animationCounter++ % 8]){
+        setToStandRight();
+        setToStandLeft();
+    }
+    
+    public void setToStandRight(){
+        if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image5 && isOnGround()){
             setImage(image1);
-        }else if(getImage() == walkLeft[animationCounter++ % 8]){
+        }
+    }
+    
+    public void setToStandLeft(){
+        if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image6){
             setImage(image2);
         }
     }
+    
     
     /**
      * Animates the jump.
      */
     public void animateJump(){
+        animateJumpRight();
+        animateJumpLeft();
+    }
+    
+    public void animateJumpRight(){
         if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image1){
             setImage(image5);
-        }else if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image2){
+        }
+    }
+    public void animateJumpLeft(){
+        if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image2){
             setImage(image6);
         }
     }
