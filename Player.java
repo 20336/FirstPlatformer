@@ -117,7 +117,45 @@ public class Player extends Actor
         setLocation(getX(), getY()+dY);
         dY += acceleration;
     }
+    /**
+     * Checks if the plager is on the ground or on the platform, if not then the player will fall.
+     */
+    public void checkForFall(){
+        if(isOnGround() || isOnPlatform()){
+            dY = 0;
+            setToLand();
+        }else{  
+            fall();
+        }
+    }
     
+    public void checkForMoveRight(){
+        if(rightSidePlatform()){
+            dX = 0;
+            setToLand();
+        }else{  
+            moveRight();
+        }
+    }
+    public void checkForMoveLeft(){
+        if(leftSidePlatform()){
+            dX = 0;
+            setToLand();
+        }else{  
+            moveLeft();
+        }
+    }
+    
+    /**
+     * Sets how the player will jump.
+     */
+    public void jump(){
+       if(jumpDelayCounter >= jumpDelayTime){
+           dY = -jumpStrength; 
+           fall();  
+           jumpDelayCounter = 0;
+       }
+    }
     
     
     
@@ -128,6 +166,28 @@ public class Player extends Actor
     public boolean isOnPlatform(){
         Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Platform.class);
         return under != null;
+    }
+    
+    /**
+     * Detects if the player is to the right of the platform.
+     */
+    public boolean rightSidePlatform(){
+        Actor bumped = getOneObjectAtOffset(getImage().getWidth()/2, getImage().getHeight()/2, Platform.class);
+        return bumped != null;
+    }
+    /**
+     * Detects if the player is to the left of the platform.
+     */
+    public boolean leftSidePlatform(){
+        Actor bumped = getOneObjectAtOffset(0, 0, Platform.class);
+        return bumped != null;
+    }
+    /**
+     * Detects if the player is below the platform.
+     */
+    public boolean belowPlatform(){
+        Actor above = getOneObjectAtOffset(getImage().getWidth()/2, 0, Platform.class);
+        return above != null;
     }
     /**
      * Detects if the player is on the ground.
@@ -167,9 +227,9 @@ public class Player extends Actor
      */
     public void checkKeys(){   
         if(Greenfoot.isKeyDown("d")){
-            moveRight();
+            checkForMoveRight();
         }else if(Greenfoot.isKeyDown("a")){
-            moveLeft();
+            checkForMoveLeft();
         }else{
             setToStand();
         }
@@ -260,31 +320,7 @@ public class Player extends Actor
     
     
     
-    /*
-     * Jumping and fall.
-     */
-    /**
-     * Checks if the plager is on the ground or on the platform, if not then the player will fall.
-     */
-    public void checkForFall(){
-        if(isOnGround() || isOnPlatform()){
-            dY = 0;
-            setToLand();
-        }else{  
-            fall();
-        }
-    }
     
-    /**
-     * Sets how the player will jump.
-     */
-    public void jump(){
-       if(jumpDelayCounter >= jumpDelayTime){
-           dY = -jumpStrength; 
-           fall();  
-           jumpDelayCounter = 0;
-       }
-    }
     
     
     
@@ -420,10 +456,19 @@ public class Player extends Actor
      * Sets the player to the plain standing image after jumping.
      */
     public void setToLand(){
+        setToLandRight();
+    }
+    public void setToLandRight(){
         if(getImage() == walkRight[animationCounter++ % 8] || getImage() == image5){
             setImage(image1);
         }
     }
+    public void setToLandLeft(){
+        if(getImage() == walkLeft[animationCounter++ % 8] || getImage() == image6){
+            setImage(image2);
+        }
+    }
+    
     
     /**
      * Sets the player to the plain standing image after running.
