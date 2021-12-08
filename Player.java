@@ -11,6 +11,7 @@ public class Player extends Actor
     public static int enemiesKilled;
     public static int spawnDragon;
     
+    private boolean emptyHand;
     private boolean bowEquipped;
     private boolean swordEquipped;
     
@@ -52,9 +53,11 @@ public class Player extends Actor
         arrowDelayCounter = 0;
         swordAttackTime = 20;
         swordAttackCounter = 0;
-    
-        arrowShot = false;
         
+        emptyHand = true;
+        arrowShot = false;
+        swordEquipped = false;
+        bowEquipped = false;
         
         initAnimationSprites();
         
@@ -337,21 +340,19 @@ public class Player extends Actor
      */    
     public void pickUpSword(){
         if(isTouching(Sword.class)){
+            emptyHand = false;
             bowEquipped = false;
             swordEquipped = true;
             removeTouching(Sword.class);
-            
-            image1 = new GreenfootImage("KnightWithSwordRight.png");
-            image2 = new GreenfootImage("KnightWithSwordLeft.png");
-            
-            image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
-            image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
         }
     }
     
     public void swordImages(){
         if(swordEquipped = true){
-            
+            image1 = new GreenfootImage("KnightWithSwordRight.png");
+            image2 = new GreenfootImage("KnightWithSwordLeft.png");
+            image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
+            image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
         }
     }
     
@@ -360,15 +361,17 @@ public class Player extends Actor
      */
     public void pickUpBow(){
         if(isTouching(Bow.class)){
+            emptyHand = false;
             swordEquipped = false;
             bowEquipped = true;
             removeTouching(Bow.class);
-            
-            
+        }
+    }
+    
+    public void bowImages(){
+        if(bowEquipped = true){
             image1 = new GreenfootImage("KnightWithBowRight.png");
             image2 = new GreenfootImage("KnightWithBowLeft.png");
-            
-            
             image5 = new GreenfootImage("KnightWithBowJumpingRight.png");
             image6 = new GreenfootImage("KnightWithBowJumpingLeft.png");
         }
@@ -377,19 +380,48 @@ public class Player extends Actor
     
     
     
-    
-    
+    public void emptyHandAnimationSprites(){
+        if(emptyHand = true){
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkRight" +i+ ".png";
+                walkRight[i] = new GreenfootImage(filename);
+            }
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkRight" +i+ ".png";
+                walkLeft[i] = new GreenfootImage(filename);
+                walkLeft[i].mirrorHorizontally();
+            } 
+        }
+    }
+    public void swordAnimationSprites(){
+        if(swordEquipped = true){
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkSwordRight" +i+ ".png";
+                walkRight[i] = new GreenfootImage(filename);
+            }
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkSwordRight" +i+ ".png";
+                walkLeft[i] = new GreenfootImage(filename);
+                walkLeft[i].mirrorHorizontally();
+            } 
+        }
+    }
+    public void bowAnimationSprites(){
+        if(bowEquipped = true){
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkBowRight" +i+ ".png";
+                walkRight[i] = new GreenfootImage(filename);
+            }
+            for(int i = 0; i < 8; i++){
+                String filename = "KnightWalkBowRight" +i+ ".png";
+                walkLeft[i] = new GreenfootImage(filename);
+                walkLeft[i].mirrorHorizontally();
+            } 
+        }
+    }
     
     public void initAnimationSprites(){
-        for(int i = 0; i < 8; i++){
-            String filename = "KnightWalkRight" +i+ ".png";
-            walkRight[i] = new GreenfootImage(filename);
-        }
-        for(int i = 0; i < 8; i++){
-            String filename = "KnightWalkRight" +i+ ".png";
-            walkLeft[i] = new GreenfootImage(filename);
-            walkLeft[i].mirrorHorizontally();
-        }
+        emptyHandAnimationSprites();
     }
     
     
