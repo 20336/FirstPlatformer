@@ -47,7 +47,7 @@ public class Player extends Actor
     int animationCounter = 0;
     
     public Player(){
-        jumpDelayTime = 40;
+        jumpDelayTime = 10;
         jumpDelayCounter = 0;   
         arrowDelayTime = 50;
         arrowDelayCounter = 0;
@@ -79,6 +79,9 @@ public class Player extends Actor
     public void act(){
         checkKeys();
         checkForFall();
+        
+        belowPlatform();
+        
         pickUpSword();
         pickUpBow();
         checkForEnoughHits();
@@ -131,11 +134,17 @@ public class Player extends Actor
             fall();
         }
     }
+    public void checkForHeadHit(){
+        if(belowPlatform()){
+            jump();
+        }else{
+            
+        }
+    }
     
     public void checkForMoveRight(){
         if(rightSidePlatform()){
             dX = 0;
-            setToLand();
         }else{  
             moveRight();
         }
@@ -143,7 +152,6 @@ public class Player extends Actor
     public void checkForMoveLeft(){
         if(leftSidePlatform()){
             dX = 0;
-            setToLand();
         }else{  
             moveLeft();
         }
@@ -154,6 +162,7 @@ public class Player extends Actor
      */
     public void jump(){
        if(jumpDelayCounter >= jumpDelayTime){
+           detectAbovePlatform();
            dY = -jumpStrength; 
            fall();  
            jumpDelayCounter = 0;
@@ -189,8 +198,24 @@ public class Player extends Actor
      * Detects if the player is below the platform.
      */
     public boolean belowPlatform(){
-        Actor above = getOneObjectAtOffset(getImage().getWidth()/2, 0, Platform.class);
-        return above != null;
+        Actor above = getOneObjectAtOffset(0, 0, Platform.class);
+        if(above != null){
+            dY = 1;
+            hitHead(above);
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
+     * The actor hits 
+     */
+    public void hitHead(Actor above){
+        int aboveHeight = above.getImage().getHeight();
+        int newY = above.getY() + (aboveHeight + getImage().getHeight())/2;
+        
+        setLocation(getX(), newY);
     }
     /**
      * Detects if the player is on the ground.
@@ -216,6 +241,14 @@ public class Player extends Actor
             }
         }
     }
+    public void detectAbovePlatform(){
+        for(int i = 0; i < dY; i--){
+            Actor above = getOneObjectAtOffset(0, 0-i, Platform.class);
+            if(above != null){
+                dY = i;
+            }
+        }
+    }
     
     public void onlyFallThroughTop(){
         
@@ -230,9 +263,9 @@ public class Player extends Actor
      */
     public void checkKeys(){   
         if(Greenfoot.isKeyDown("d")){
-            checkForMoveRight();
+            moveRight();
         }else if(Greenfoot.isKeyDown("a")){
-            checkForMoveLeft();
+            moveLeft();
         }else{
             setToStand();
         }

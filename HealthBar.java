@@ -8,12 +8,21 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class HealthBar extends Actor
 {
+    private int xLocation;
+    private int yLocation;
+    
+    
     /**
-     * Act - do whatever the HealthBar wants to do. This method is called whenever
+     * Act - do whatever the Heart wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act()
     {
-        // Add your action code here.
+        setLocation(xLocation, yLocation);
+    }
+    
+    public HealthBar(int xLocation, int yLocation){
+        this.xLocation = xLocation;
+        this.yLocation = yLocation;
     }
 }
