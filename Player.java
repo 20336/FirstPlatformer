@@ -242,7 +242,7 @@ public class Player extends Actor
         }
     }
     public void detectAbovePlatform(){
-        for(int i = 0; i < dY; i--){
+        for(int i = 0; i > dY; i--){
             Actor above = getOneObjectAtOffset(0, 0-i, Platform.class);
             if(above != null){
                 dY = i;
@@ -316,7 +316,7 @@ public class Player extends Actor
      * Sees if the enemy has taken enough hits, if so then the enemy dies.
      */
     public void checkForEnoughHits(){
-        if(enemyHit >= 4){
+        if(enemyHit >= 5){
             removeTouching(Enemy.class);
             enemiesKilled++;
             spawnDragon++;
@@ -376,6 +376,7 @@ public class Player extends Actor
             emptyHand = false;
             bowEquipped = false;
             swordEquipped = true;
+            swordImages();
             removeTouching(Sword.class);
         }
     }
@@ -386,6 +387,7 @@ public class Player extends Actor
             image2 = new GreenfootImage("KnightWithSwordLeft.png");
             image5 = new GreenfootImage("KnightWithSwordJumpingRight.png");
             image6 = new GreenfootImage("KnightWithSwordJumpingLeft.png");
+            swordAnimationSprites();
         }
     }
     
@@ -397,6 +399,7 @@ public class Player extends Actor
             emptyHand = false;
             swordEquipped = false;
             bowEquipped = true;
+            bowImages();
             removeTouching(Bow.class);
         }
     }
@@ -407,6 +410,7 @@ public class Player extends Actor
             image2 = new GreenfootImage("KnightWithBowLeft.png");
             image5 = new GreenfootImage("KnightWithBowJumpingRight.png");
             image6 = new GreenfootImage("KnightWithBowJumpingLeft.png");
+            bowAnimationSprites();
         }
     }
     

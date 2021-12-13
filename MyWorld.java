@@ -8,7 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MyWorld extends World
 {
-    
+    int spawnDelayTime;
+    int spawnDelayCounter;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -18,6 +19,8 @@ public class MyWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1);
         
+        spawnDelayTime = 10;
+        spawnDelayCounter = 0;
         
         addObject(new Ground(), getWidth()/2, getHeight()-15);
         addObject(new Platform(), 125, getHeight()/3);
@@ -30,17 +33,20 @@ public class MyWorld extends World
         
         addObject(new Sword(), getWidth()/4, getHeight()-100);
         
-        addObject(new Creature(getWidth()/5), getWidth()/5, 106);
-        addObject(new Creature(getWidth()/3), getWidth()/3, getHeight()-187);
-        addObject(new Creature(getWidth()-190), getWidth()-190, getHeight()-187);
-        addObject(new Creature(getWidth()-270), getWidth()-270, 93);
-        addObject(new Creature(getWidth()-150), getWidth()-150, getHeight()-77);
+        addObject(new Creature(10, getWidth()/5), getWidth()/5, 106);
+        addObject(new Creature(20, getWidth()/3), getWidth()/3, getHeight()-187);
+        
+        addObject(new Creature(30, getWidth()-190), getWidth()-190, getHeight()-187);
+        addObject(new Creature(40, getWidth()-270), getWidth()-270, 106);
+        
+        addObject(new Creature(0, getWidth()/2), getWidth()/2, getHeight()-77);
         
         addObject(new Player(), 100, getHeight()-97);        
     }
     
     public void act()
     {
+        spawnMoreCreatures();
         checkIfAllCreaturesDead();
     }
     
@@ -56,13 +62,14 @@ public class MyWorld extends World
     
     public void spawnMoreCreatures()
     {
-        if(Player.enemiesKilled == 5)
+        if(spawnDelayTime < spawnDelayCounter)
         {
-            addObject(new Creature(getWidth()/5), getWidth()/5, 105);
+            addObject(new Creature(1, getWidth()/5), getWidth()/5, 106);
             
-            addObject(new Creature(getWidth()-190), getWidth()-190, getHeight()-188);
-            addObject(new Creature(getWidth()-270), getWidth()-270, 92);
-            Player.enemiesKilled = 0;
+            addObject(new Creature(1, getWidth()-190), getWidth()-190, getHeight()-188);
+            addObject(new Creature(1, getWidth()-270), getWidth()-270, 92);
+            spawnDelayCounter++;
+            spawnDelayCounter = 0;
         } 
     }
 }

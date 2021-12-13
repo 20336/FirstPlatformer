@@ -8,13 +8,18 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Creature extends Enemy
 {
+    private int hitPoints = 5;
     private int dX = 1;
     private int dY = 2;
     private int acceleration = 1;
     private int startX;
+    private int startTime;
+    private int startCounter;
     
-    public Creature(int startX){
+    public Creature(int startTime, int startX){
+        this.startTime = startTime;
         this.startX = startX;
+        startCounter = 0;
     }
     
     /**
@@ -23,27 +28,12 @@ public class Creature extends Enemy
      */
     public void act(){
         checkForFall();
-        move();
-        moveSidetoSide();
+        
+        startCounter++;
     }
     
-    /**
-     * Moves the creature a certain amount in the x direction.
-     */
-    public void move(){
-        setLocation(getX()+dX, getY());
-    }
     
-    /**
-     * 
-     */
-    public void moveSidetoSide(){
-        if(getX() >= startX + 20){
-            dX = -1;
-        }else if(getX() <= startX - 20){
-            dX = 1;
-        }
-    }
+    
     
     /**
      * Makes the emeny fall if not on platform.
