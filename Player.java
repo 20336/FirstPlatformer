@@ -7,9 +7,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version (a version number or a date)
  */
 public class Player extends Actor
-{   private int enemyHit = 0;
-    public static int enemiesKilled;
-    public static int spawnDragon;
+{   private int enemyHit = 4;
+    private int enemiesKilled;
+    private int spawnDragon;
     
     private boolean emptyHand;
     private boolean bowEquipped;
@@ -307,7 +307,7 @@ public class Player extends Actor
      */
     public void attack(){
          if(swordAttackCounter >= swordAttackTime && isTouching(Creature.class) && swordEquipped){
-            enemyHit++; 
+            enemyHit--; 
             swordAttackCounter = 0;
          }
     }
@@ -316,11 +316,11 @@ public class Player extends Actor
      * Sees if the enemy has taken enough hits, if so then the enemy dies.
      */
     public void checkForEnoughHits(){
-        if(enemyHit >= 5){
-            removeTouching(Enemy.class);
+        if(enemyHit == 1){
+            removeTouching(Creature.class);
             enemiesKilled++;
             spawnDragon++;
-            enemyHit = 0;
+            enemyHit = 5;
         }
     }
     
@@ -348,6 +348,31 @@ public class Player extends Actor
         }
     }
     
+    /**
+     * Gets the spawnDragon int.
+     */
+    public int getSpawnDragon(){
+        return spawnDragon;
+    }
+    /**
+     * Sets the spawnDragon int.
+     */
+    public void setSpawnDragon(int spawnDragon){
+        this.spawnDragon = spawnDragon;
+    }
+    
+    /**
+     * Gets the enemyHit int.
+     */
+    public int getEnemyHit(){
+        return enemyHit;
+    }
+    /**
+     * Sets the enemyHit int.
+     */
+    public void setEnemyHit(int enemyHit){
+        this.enemyHit = enemyHit;
+    }
     
     
     

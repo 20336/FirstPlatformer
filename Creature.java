@@ -8,18 +8,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Creature extends Enemy
 {
-    private int hitPoints = 5;
-    private int dX = 1;
-    private int dY = 2;
-    private int acceleration = 1;
-    private int startX;
-    private int startTime;
-    private int startCounter;
-    
-    public Creature(int startTime, int startX){
-        this.startTime = startTime;
-        this.startX = startX;
-        startCounter = 0;
+    private int hitPoints;
+    Player player = new Player();
+    /**
+     * The creature has time that it starts moving and it's first X position.
+     */
+    public Creature(int startTime, int startX, int hitPoints){
+        this.setStartTime(startTime);
+        this.setStartX(startX);
+        this.hitPoints = player.getEnemyHit();
     }
     
     /**
@@ -28,58 +25,24 @@ public class Creature extends Enemy
      */
     public void act(){
         checkForFall();
-        
-        startCounter++;
+        move();
+        moveSidetoSide();
+        setStartCounter(getStartCounter()+1);
     }
     
     
     
-    
     /**
-     * Makes the emeny fall if not on platform.
+     * Gets the hitPoints int.
      */
-    public void fall(){
-        detectPlatform();
-        setLocation(getX(), getY()+dY);
-        dY += acceleration;
+    public int getHitPoints(){
+        return hitPoints;
     }
     
     /**
-     * Checks if the emeny is on the ground or playform, if not then it will fall.
+     * Sets the hitPoints int.
      */
-    public void checkForFall(){
-        if(isOnGround() || isOnPlatform()){
-            dY = 0;
-        }else{  
-            fall();
-        }
-    }
-    
-    /**
-     * Detects if the creature is on the platform.
-     */
-    public boolean isOnPlatform(){
-        Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Platform.class);
-        return under != null;
-    }
-
-    /**
-     * Detects if the creature is on the ground.
-     */
-    public boolean isOnGround(){
-        Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2, Ground.class);
-        return under != null;
-    }
-    
-    /**
-     * Detects how far the platform is from the bottom of the player.
-     */
-    public void detectPlatform(){
-        for(int i = 0; i < dY; i++){
-            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
-            if(under != null){
-                dY = i;
-            }
-        }
+    public void setHitPoints(int hitPoints){
+        this.hitPoints = hitPoints;
     }
 }
