@@ -10,6 +10,7 @@ public class Creature extends Enemy
 {
     private int hitPoints;
     Player player = new Player();
+    
     /**
      * The creature has time that it starts moving and it's first X position.
      */
@@ -20,8 +21,7 @@ public class Creature extends Enemy
     }
     
     /**
-     * Act - do whatever the Creature wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Act - do whatever the Creature wants to do.
      */
     public void act(){
         checkForFall();
@@ -29,8 +29,6 @@ public class Creature extends Enemy
         moveSidetoSide();
         setStartCounter(getStartCounter()+1);
     }
-    
-    
     
     /**
      * Gets the hitPoints int.

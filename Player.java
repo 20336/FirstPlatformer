@@ -7,7 +7,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version (a version number or a date)
  */
 public class Player extends Actor
-{   private int enemyHit = 4;
+{   private int enemyHit = 5;
     private int enemiesKilled;
     private int spawnDragon;
     
@@ -30,7 +30,7 @@ public class Player extends Actor
     
     private int jumpDelayTime;
     private int jumpDelayCounter;
-    private int arrowDelayTime;
+    private int arrowDelayTime; 
     private int arrowDelayCounter;
     private int swordAttackTime;
     private int swordAttackCounter;
@@ -138,7 +138,7 @@ public class Player extends Actor
         if(belowPlatform()){
             jump();
         }else{
-            
+            fall();
         }
     }
     
@@ -162,7 +162,6 @@ public class Player extends Actor
      */
     public void jump(){
        if(jumpDelayCounter >= jumpDelayTime){
-           detectAbovePlatform();
            dY = -jumpStrength; 
            fall();  
            jumpDelayCounter = 0;
@@ -209,7 +208,7 @@ public class Player extends Actor
     }
     
     /**
-     * The actor hits 
+     * The player hits their head on the platfrom above
      */
     public void hitHead(Actor above){
         int aboveHeight = above.getImage().getHeight();
@@ -241,14 +240,7 @@ public class Player extends Actor
             }
         }
     }
-    public void detectAbovePlatform(){
-        for(int i = 0; i > dY; i--){
-            Actor above = getOneObjectAtOffset(0, 0-i, Platform.class);
-            if(above != null){
-                dY = i;
-            }
-        }
-    }
+    
     
     public void onlyFallThroughTop(){
         
@@ -307,7 +299,8 @@ public class Player extends Actor
      */
     public void attack(){
          if(swordAttackCounter >= swordAttackTime && isTouching(Creature.class) && swordEquipped){
-            enemyHit--; 
+            enemyHit--;
+            Sounds.swordSound();
             swordAttackCounter = 0;
          }
     }
@@ -316,7 +309,7 @@ public class Player extends Actor
      * Sees if the enemy has taken enough hits, if so then the enemy dies.
      */
     public void checkForEnoughHits(){
-        if(enemyHit == 1){
+        if(enemyHit == 0){
             removeTouching(Creature.class);
             enemiesKilled++;
             spawnDragon++;
@@ -616,4 +609,13 @@ public class Player extends Actor
     public void animateWalkLeft(){
         setImage(walkLeft[animationCounter++ % 8]);
     }
+    /**
+     * Sword attack sound effect.
+     */
+    public void swordSound(){
+        GreenfootSound sound = new GreenfootSound("sword.wav");
+        sound.setVolume(50);
+        sound.play();
+    }
+    
 }
