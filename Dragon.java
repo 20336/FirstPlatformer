@@ -16,6 +16,8 @@ public class Dragon extends Enemy
     private int fireballDelay;
     private int fireballDelayCount;
     
+    private boolean fireballShot;
+    
     private GreenfootImage image1;
     private GreenfootImage image2;
     
@@ -26,6 +28,8 @@ public class Dragon extends Enemy
         
         fireballDelay = 80;
         fireballDelayCount = 0;
+        
+        fireballShot = false;
         
         image1 = new GreenfootImage("Dragon.png");
         image2 = new GreenfootImage("DragonAngry.png");
@@ -39,7 +43,6 @@ public class Dragon extends Enemy
         shootFireball();
         fireballDelayCount++;
         arrowDamage();
-        checkForEnoughDamage();
         move();
         moveUpAndDown();
     }
@@ -49,17 +52,6 @@ public class Dragon extends Enemy
      */
     public void move(){
         setLocation(getX(), getY()+yMovement);
-    }
-    
-    /**
-     * Spawns a fireball.
-     */
-    public void shootFireball(){
-        if(fireballDelayCount >= fireballDelay){
-            setAngryDragon();
-            getWorld().addObject(new Fireball(), getX()-10, getY()-55);
-            fireballDelayCount = 0;
-        }
     }
     
     
@@ -82,22 +74,38 @@ public class Dragon extends Enemy
         }
     }
     
-    /**
-     * Checks if the dragon has tallied up a certain amount of damage, if so then the dragon gets 
-     * removed.
-     */
-    public void checkForEnoughDamage(){
-        if(damage == 20){
-            getWorld().removeObject(this);
-        }
-    }
-    
-    
     public void setAngryDragon(){
         if(getImage() == image1){
             setImage(image2);
         }else{
             setImage(image1);
         }
+    }
+    /**
+     * The dragon summons a fireball.
+     */
+    public void shootFireball(){
+        if(!fireballShot){
+            fireballShotFalse();
+            getWorld().addObject(new Fireball(), getX()-10, getY()-55);
+            fireballDelayCount = 0;
+            setAngryDragon();
+            fireballShot = true;
+        }
+    }
+    
+    /**
+     * Sets the boolean fireballShot to false after a certain amount of time.
+     * Makes the dragon put the keep the angry face.
+     */
+    public void fireballShotFalse(){
+        if(fireballDelayCount >= fireballDelay){
+            fireballShot = false;
+            setAngryDragon();
+        }
+    }
+    
+    public int getDamage(){
+        return damage;
     }
 }
