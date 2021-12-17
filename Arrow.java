@@ -7,13 +7,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version (a version number or a date)
  */
 public class Arrow extends Projectile
-{   private int dX = 4;
-    
-    
+{   private int dX = 5;
     
     /**
-     * Act - do whatever the Arrow wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Act - do whatever the Arrow wants to do.
      */
     public void act()
     {
@@ -21,6 +18,9 @@ public class Arrow extends Projectile
         goOffScreen();
     }
     
+    /**
+     * How the arrow moves.
+     */
     public void move()
     {
             setLocation(getX()+ dX, getY());

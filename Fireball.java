@@ -10,9 +10,10 @@ public class Fireball extends Projectile
 {
     private int dX = Greenfoot.getRandomNumber(3)+1;
     private int dY = Greenfoot.getRandomNumber(3)+1;
+    Dead Dead = new Dead();
+    
     /**
-     * Act - do whatever the Fireball wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Act - do whatever the Fireball wants to do.
      */
     public void act()
     {
@@ -21,19 +22,23 @@ public class Fireball extends Projectile
         goOffScreen();
     }
     
+    /**
+     * How the fireball moves.
+     */
     public void move()
     {
         setLocation(getX()- dX, getY()+ dY);
     }
     
-    
-    
+    /**
+     * If the fire is touching the player, the player dies.
+     */
     public void killPlayer()
     {
         if(isTouching(Player.class))
         {
             removeTouching(Player.class);
-            Greenfoot.stop();
+            Greenfoot.setWorld(Dead);
         }
     }
 }

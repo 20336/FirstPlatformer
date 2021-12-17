@@ -41,10 +41,11 @@ public class Dragon extends Enemy
      */
     public void act(){
         shootFireball();
-        fireballDelayCount++;
+        fireballShotFalse();
         arrowDamage();
         move();
         moveUpAndDown();
+        fireballDelayCount++;
     }
     
     /**
@@ -74,19 +75,29 @@ public class Dragon extends Enemy
         }
     }
     
+    /**
+     * Sets the angry dragon image.
+     */
     public void setAngryDragon(){
         if(getImage() == image1){
             setImage(image2);
-        }else{
+        }
+    }
+    
+    /**
+     * Sets the angry dragon image.
+     */
+    public void setNormalDragon(){
+        if(getImage() == image2){
             setImage(image1);
         }
     }
+    
     /**
      * The dragon summons a fireball.
      */
     public void shootFireball(){
         if(!fireballShot){
-            fireballShotFalse();
             getWorld().addObject(new Fireball(), getX()-10, getY()-55);
             fireballDelayCount = 0;
             setAngryDragon();
@@ -105,6 +116,9 @@ public class Dragon extends Enemy
         }
     }
     
+    /**
+     * Gets the dragon's damage taken.
+     */
     public int getDamage(){
         return damage;
     }

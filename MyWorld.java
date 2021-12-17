@@ -8,13 +8,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class MyWorld extends World
 {
-    int spawnDelayTime;
-    int spawnDelayCounter;
+    private int spawnDelayTime;
+    private int spawnDelayCounter;
     
-    int animationDelay;
-    int animationCounter;
-    int treeCounter = 0;
-    GreenfootImage[] treesMove = new GreenfootImage[3];
+    private int animationDelay;
+    private int animationCounter;
+    
+    private int treeCounter = 0;
+    
+    private boolean playerDead;
+    
+    Win Win = new Win();
+    Dead Dead = new Dead();
+    
+    GreenfootImage[] treesMove = new GreenfootImage[4];
     Player player = new Player();
     Dragon dragon = new Dragon(getHeight()/2);
     
@@ -24,11 +31,12 @@ public class MyWorld extends World
     Creature creature4 = new Creature(20, getWidth()/3, 5);
     Creature creature5 = new Creature(30, getWidth()-190, 5);
     
-    HealthBar healthBar1 = new HealthBar(0, getWidth()/2);
-    HealthBar healthBar2 = new HealthBar(10, getWidth()/5);
-    HealthBar healthBar3 = new HealthBar(40, getWidth()-270);
-    HealthBar healthBar4 = new HealthBar(20, getWidth()/3);
-    HealthBar healthBar5 = new HealthBar(30, getWidth()-190);
+    Platform platform1 = new Platform();
+    Platform platform2 = new Platform();
+    Platform platform3 = new Platform();
+    Platform platform4 = new Platform();
+    
+
     /**
      * Constructor for objects of class MyWorld.
      */
@@ -39,18 +47,17 @@ public class MyWorld extends World
         
         spawnDelayTime = 10;
         spawnDelayCounter = 0;
-        int animationDelay = 10;
-        int animationCounter = 0;
+        animationDelay = 80;
+        animationCounter = 0;
         
-        addObject(new Ground(), getWidth()/2, getHeight()-15);
-        addObject(new Platform(), 125, getHeight()/3);
-        addObject(new Platform(), getWidth()-250, getHeight()/3);
-        addObject(new Platform(), 200, getHeight() -160);
-        addObject(new Platform(), getWidth()-200, getHeight() -160);
-        
-        
-        
-        
+        for(int i = 0 ; i <= 3 ; i++){
+            addObject(new Ground(), i*100, getHeight()-15);
+        }
+        addObject(platform1, 125, getHeight()/3);
+        addObject(platform2, getWidth()-250, getHeight()/3);
+        addObject(platform3, 200, getHeight() -160);
+        addObject(platform4, getWidth()-200, getHeight() -160);
+                
         addObject(new Sword(), getWidth()/4, getHeight()-100);
         
         
@@ -69,10 +76,7 @@ public class MyWorld extends World
         addObject(creature5, getWidth()-190, getHeight()-187);
                     //addObject(healthBar5, getWidth()-190, getHeight()-207);
         
-        
-            
-        
-        addObject(player, 100, getHeight()-97);        
+        addObject(player, 100, getHeight()-97);
     }
     
     /**
@@ -81,6 +85,7 @@ public class MyWorld extends World
     public void act()
     {
         checkIfAllCreaturesDead();
+        checkForEnoughDamage();
         treeAnimation();
         animationCounter++;
         treeAnimationImages();
@@ -93,34 +98,51 @@ public class MyWorld extends World
     {
         if(player.getSpawnDragon() == 5)
         {
+            removeObject(platform1);
+            removeObject(platform2);
             addObject(dragon, getWidth()-50, getHeight()/2);
             addObject(new Bow(), getWidth()/4, getHeight()-100);
             player.setSpawnDragon(0);
         }
     }
+    
+    /**
+     * Allows the trees in the background to sway.
+     */
     public void treeAnimation(){
         if(animationCounter >= animationDelay){
             animationCounter = 0;
-            setBackground(treesMove[treeCounter++ % 3]);
+            setBackground(treesMove[treeCounter++ % 4]);
             animationCounter = 0;
         }
     }
     
+    /**
+     * Sets the tree swaying images.
+     */
     public void treeAnimationImages(){
-        if(animationCounter >= animationDelay){
-        for(int i = 0; i < 3; i++){
+        for(int i = 0; i < 4; i++){
             String filename = "Sky" +i+ ".png";
             treesMove[i] = new GreenfootImage(filename);
         }
-    }}
+    }
     
     /**
      * Checks if the dragon has tallied up a certain amount of damage, if so then the dragon gets 
      * removed.
      */
     public void checkForEnoughDamage(){
-        if(dragon.getDamage() == 20){
+        if(dragon.getDamage() == 10){
             removeObject(dragon);
+            Greenfoot.setWorld(Win);
         }
+    }
+    
+    public boolean getPlayerDead(){
+        return playerDead;
+    }
+    
+    public void setPlayerDead(boolean playerDead){
+        this.playerDead = playerDead;
     }
 }
