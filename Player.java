@@ -97,7 +97,7 @@ public class Player extends Actor
      * Makes the player die when they touch then bottom of the world.
      */
     public void bottomDeath(){
-        if(getY() <=0 || getY()>= getWorld().getHeight()-1){
+        if(getY()>= getWorld().getHeight()-1){
             Greenfoot.setWorld(Dead);
         }
     }

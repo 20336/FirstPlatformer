@@ -72,7 +72,7 @@ public class Creature extends Enemy
      */
     public void squishAnimationImages(){
         for(int i = 0; i < 2; i++){
-            String filename = "creature" +i+ ".png";
+            String filename = "Creature" +i+ ".png";
             enemySquishImg[i] = new GreenfootImage(filename);
         }
     }
