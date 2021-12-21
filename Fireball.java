@@ -38,6 +38,7 @@ public class Fireball extends Projectile
         if(isTouching(Player.class))
         {
             removeTouching(Player.class);
+            Sounds.deadSound();
             Greenfoot.setWorld(Dead);
         }
     }

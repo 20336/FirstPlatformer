@@ -26,6 +26,7 @@ public class Win extends World
      */
     public void act()
     {
+        Sounds.winSound();
         Greenfoot.stop();
     }
 }

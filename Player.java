@@ -99,6 +99,7 @@ public class Player extends Actor
      */
     public void bottomDeath(){
         if(getY()>= getWorld().getHeight()-1){
+            Sounds.deadSound();
             Greenfoot.setWorld(Dead);
         }
     }
@@ -183,6 +184,7 @@ public class Player extends Actor
        if(jumpDelayCounter >= jumpDelayTime){
            dY = -jumpStrength; 
            fall();  
+           Sounds.jumpSound();
            jumpDelayCounter = 0;
        }
     }
@@ -349,6 +351,7 @@ public class Player extends Actor
             removeTouching(Creature.class);
             enemiesKilled++;
             spawnDragon++;
+            Sounds.creatureDeathSound();
             enemyHit = 0;
         }
     }
@@ -361,6 +364,7 @@ public class Player extends Actor
             getWorld().addObject(new Arrow(), getX()+2, getY()-5);
             arrowDelayCounter = 0;
             bowLift();
+            Sounds.arrowShotSound();
             arrowShot = true;
         }
     }
@@ -416,6 +420,7 @@ public class Player extends Actor
             bowEquipped = false;
             swordEquipped = true;
             swordImages();
+            Sounds.swordEquippedSound();
             removeTouching(Sword.class);
         }
     }

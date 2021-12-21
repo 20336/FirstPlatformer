@@ -71,6 +71,7 @@ public class Dragon extends Enemy
     public void arrowDamage(){
         if(isTouching(Arrow.class)){
             damage++;
+            Sounds.arrowHitSound();
             removeTouching(Arrow.class);
         }
     }
@@ -101,6 +102,7 @@ public class Dragon extends Enemy
             getWorld().addObject(new Fireball(), getX()-10, getY()-55);
             fireballDelayCount = 0;
             setAngryDragon();
+            Sounds.fireballSound();
             fireballShot = true;
         }
     }

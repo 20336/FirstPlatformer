@@ -16,11 +16,9 @@ public class MyWorld extends World
     
     private int skyCounter = 0;
     
-    
-    
     private boolean beginning;
-    private boolean lvlOne = false;
-    private boolean lvlTwo = false;
+    private boolean lvlOne;
+    private boolean lvlTwo;
     
     Win Win = new Win();
     
@@ -58,10 +56,7 @@ public class MyWorld extends World
         animationDelay = 40;
         animationCounter = 0;
         
-        beginning = true;
-        
-        
-        addObject(txt, getWidth()/2, getHeight()/2);
+        setBeginning(true);
         
         for(int i = 0 ; i <= 2 ; i++){
             addObject(new Ground(), i*100, getHeight()-15);
@@ -87,9 +82,18 @@ public class MyWorld extends World
         levels();
     }
     
+    public void enemiesKilled(){
+        showText("To move, press 'a' or 'd'.", getWidth()/2, 50);
+    }
+    
+    /**
+     * Starts the game.
+     */
     public void start(){
-        if(Greenfoot.isKeyDown("enter")){
+        if(Greenfoot.isKeyDown("enter") && getBeginning()){
             removeObject(start);
+            showText("To move, press 'a' or 'd'.", getWidth()/2, 50);
+            showText("To jump, press 'space'.", getWidth()/2, 75);
         }
     }
     
@@ -121,57 +125,112 @@ public class MyWorld extends World
     public void checkForEnoughDamage(){
         if(dragon.getDamage() == 10){
             removeObject(dragon);
+            Sounds.winSound();
             Greenfoot.setWorld(Win);
         }
     }
     
+    /**
+     * Gets the beginning boolean value
+     */
     public boolean getBeginning(){
         return beginning;
     }
     
+    /**
+     * Sets the beginning boolean to true or false.
+     */
+    public void setBeginning(boolean beginning){
+        this.beginning = beginning;
+    }
     
+    /**
+     * Gets the lvlOne boolean value
+     */
+    public boolean getLvlOne(){
+        return lvlOne;
+    }
     
+    /**
+     * Sets the lvlOne boolean to true or false.
+     */
+    public void setLvlOne(boolean lvlOne){
+        this.lvlOne = lvlOne;
+    }
+    
+    /**
+     * Gets the lvlTwo boolean value
+     */
+    public boolean getLvlTwo(){
+        return lvlTwo;
+    }
+    
+    /**
+     * Sets the lvlTwo boolean to true or false.
+     */
+    public void setLvlTwo(boolean lvlTwo){
+        this.lvlTwo = lvlTwo;
+    }
+    
+    /**
+     * Checks all the levels at once.
+     */
     public void levels(){
         lvlOne();
         lvlTwo();
         lvlThree();
     }
     
+    /**
+     * Sets up everything for level one if it is level one.
+     */
     public void lvlOne(){
-        if(beginning = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 0){
-            beginning = false;
-            lvlOne = true;
+        if(getBeginning() && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 0){
+            setBeginning(false);
+            setLvlOne(true);
             player.setLocation(1, getHeight()-97);
             lvlOneObjects();
         }
     }
     
+    /**
+     * Sets up everything for level two if it is level two.
+     */
     public void lvlTwo(){
-        if(lvlOne = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 1){
-            lvlOne = false;
-            lvlTwo = true;
+        if(getLvlOne() && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 1){
+            setLvlOne(false);
+            setLvlTwo(true);
             player.setLocation(1, getHeight()-97);
             lvlTwoObjects();
         }
     }
     
+    /**
+     * Sets up everything for level three if it is level three.
+     */
     public void lvlThree(){
-        if(lvlTwo = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 5){
+        if(getLvlTwo() && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 5){
+            player.setLocation(1, getHeight()-97);
             lvlThreeObjects();
         }
     }
     
+    /**
+     * Sets the objects for the first level.
+     */
     public void lvlOneObjects(){
-        
-        removeObject(txt);
-        addObject(txt1, getWidth()/2, getHeight()/2);
+        showText("To use your attack, press 'enter'.", getWidth()/2, 50);
+        showText("", getWidth()/2, 75);
         addObject(new Sword(), getWidth()/4, getHeight()-100);
         addObject(creature1, getWidth()-100, getHeight()-77);
     }
     
+    /**
+     * Sets the objects for the second level.
+     */
     public void lvlTwoObjects(){
-        removeObject(txt1);
-        addObject(txt2, getWidth()/2, getHeight()/2);
+        showText("You are a knight. You were sent out to kill the dragon.", getWidth()/2, 50);
+        showText("To get to the dragon, you must kill all the creatures.", getWidth()/2, 75);
         addObject(new Ground(), getWidth()/2, getHeight()-15);
         
         addObject(platform1, 125, getHeight()/3);
@@ -185,8 +244,12 @@ public class MyWorld extends World
         addObject(creature5, getWidth()-190, getHeight()-187);
     }
     
+    /**
+     * Sets the objects for the third level.
+     */
     public void lvlThreeObjects(){
-        removeObject(txt2);
+        showText("", getWidth()/2, 50);
+        showText("", getWidth()/2, 75);
         removeObject(platform1);
         removeObject(platform2);
         removeObject(platform4);
