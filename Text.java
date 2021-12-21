@@ -22,8 +22,8 @@ public class Text extends Actor
         this.lvlText = lvlText;
         
         txtBeginning = new GreenfootImage("beginningtext.png");
-        txt1 = new GreenfootImage("lvl1text.png");
-        txt2 = new GreenfootImage("lvl2text.png");
+        txt1 = new GreenfootImage("lvl2text.png");
+        txt2 = new GreenfootImage("lvl1text.png");
     }
     
     /**

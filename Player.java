@@ -78,8 +78,9 @@ public class Player extends Actor
     public void act(){
         checkKeys();
         checkForFall();
-        
         belowPlatform();
+        checkForMoveRight();
+        checkForMoveLeft();
         
         pickUpSword();
         pickUpBow();
@@ -154,13 +155,13 @@ public class Player extends Actor
     }
     
     /**
-     * Makes the player move left.
+     * Makes the player move right.
      */
     public void checkForMoveRight(){
-        if(rightSidePlatform()){
-            dX = 0;
+        if(!rightSidePlatform() && !rightSideGround()){
+            dX = 4;
         }else{  
-            moveRight();
+            dX = 0;
         }
     }
     
@@ -168,10 +169,10 @@ public class Player extends Actor
      * Makes the player move left.
      */
     public void checkForMoveLeft(){
-        if(leftSidePlatform()){
-            dX = 0;
+        if(!leftSidePlatform() && !leftSideGround()){
+            dX = 4;
         }else{  
-            moveLeft();
+            dX = 0;
         }
     }
     
@@ -187,7 +188,7 @@ public class Player extends Actor
     }
     
     /*
-     * Player platform detection
+     * Player platform and ground detection
      */
     /**
      * Detects if the player is on the platform.
@@ -210,6 +211,22 @@ public class Player extends Actor
      */
     public boolean leftSidePlatform(){
         Actor bumped = getOneObjectAtOffset(0, 0, Platform.class);
+        return bumped != null;
+    }
+    
+    /**
+     * Detects if the player is to the right of the ground.
+     */
+    public boolean rightSideGround(){
+        Actor bumped = getOneObjectAtOffset(getImage().getWidth()/2, getImage().getHeight()/2, Ground.class);
+        return bumped != null;
+    }
+    
+    /**
+     * Detects if the player is to the left of the ground.
+     */
+    public boolean leftSideGround(){
+        Actor bumped = getOneObjectAtOffset(0, 0, Ground.class);
         return bumped != null;
     }
     
@@ -259,6 +276,18 @@ public class Player extends Actor
             Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Ground.class);
             if(under != null){
                 dY = i;
+            }
+        }
+        for(int i = 0; i < dX; i++){
+            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Platform.class);
+            if(under != null){
+                dX = i;
+            }
+        }
+        for(int i = 0; i < dX; i++){
+            Actor under = getOneObjectAtOffset(0, getImage().getHeight()/2+i, Ground.class);
+            if(under != null){
+                dX = i;
             }
         }
     }

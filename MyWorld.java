@@ -14,19 +14,18 @@ public class MyWorld extends World
     private int animationDelay;
     private int animationCounter;
     
-    private int treeCounter = 0;
+    private int skyCounter = 0;
     
-    private boolean playerDead;
     
     
     private boolean beginning;
-    private boolean lvlOne;
-    private boolean lvlTwo;
+    private boolean lvlOne = false;
+    private boolean lvlTwo = false;
     
     Win Win = new Win();
-    Dead Dead = new Dead();
     
-    GreenfootImage[] treesMove = new GreenfootImage[4];
+    
+    GreenfootImage[] cloudsMove = new GreenfootImage[4];
     Player player = new Player();
     Dragon dragon = new Dragon(getHeight()/2);
     
@@ -36,13 +35,16 @@ public class MyWorld extends World
     Creature creature4 = new Creature(20, getWidth()/3, 5);
     Creature creature5 = new Creature(30, getWidth()-190, 5);
     
-    Platform platform = new Platform();
+    Platform platform1 = new Platform();
+    Platform platform2 = new Platform();
+    Platform platform3 = new Platform();
+    Platform platform4 = new Platform();
     
     Text txt = new Text(0);
     Text txt1 = new Text(1);
     Text txt2 = new Text(2);
     
-
+    Start start = new Start();
     /**
      * Constructor for objects of class MyWorld.
      */
@@ -57,8 +59,7 @@ public class MyWorld extends World
         animationCounter = 0;
         
         beginning = true;
-        lvlOne = false;
-        lvlTwo = false;
+        
         
         addObject(txt, getWidth()/2, getHeight()/2);
         
@@ -70,6 +71,7 @@ public class MyWorld extends World
             addObject(new Ground(), i*100, getHeight()-15);
         }
         addObject(player, 100, getHeight()-97);
+        addObject(start, getWidth()/2, getHeight()/2);
     }
     
     /**
@@ -77,35 +79,27 @@ public class MyWorld extends World
      */
     public void act()
     {
-        
+        start();
         checkForEnoughDamage();
-        treeAnimation();
+        skyAnimation();
         animationCounter++;
-        treeAnimationImages();
+        skyAnimationImages();
         levels();
     }
     
-    /**
-     * Checks if all the creatures are dead.
-     */
-    public void spawnDragon()
-    {
-        if(player.getSpawnDragon() == 5)
-        {
-            removeObject(platform);
-            addObject(dragon, getWidth()-50, getHeight()/2);
-            addObject(new Bow(), getWidth()/4, getHeight()-100);
-            player.setSpawnDragon(0);
+    public void start(){
+        if(Greenfoot.isKeyDown("enter")){
+            removeObject(start);
         }
     }
     
     /**
      * Allows the trees in the background to sway.
      */
-    public void treeAnimation(){
+    public void skyAnimation(){
         if(animationCounter >= animationDelay){
             animationCounter = 0;
-            setBackground(treesMove[treeCounter++ % 4]);
+            setBackground(cloudsMove[skyCounter++ % 4]);
             animationCounter = 0;
         }
     }
@@ -113,10 +107,10 @@ public class MyWorld extends World
     /**
      * Sets the tree swaying images.
      */
-    public void treeAnimationImages(){
+    public void skyAnimationImages(){
         for(int i = 0; i < 4; i++){
             String filename = "Sky" +i+ ".png";
-            treesMove[i] = new GreenfootImage(filename);
+            cloudsMove[i] = new GreenfootImage(filename);
         }
     }
     
@@ -129,14 +123,6 @@ public class MyWorld extends World
             removeObject(dragon);
             Greenfoot.setWorld(Win);
         }
-    }
-    
-    public boolean getPlayerDead(){
-        return playerDead;
-    }
-    
-    public void setPlayerDead(boolean playerDead){
-        this.playerDead = playerDead;
     }
     
     public boolean getBeginning(){
@@ -152,30 +138,31 @@ public class MyWorld extends World
     }
     
     public void lvlOne(){
-        if(beginning = true && player.getX() >= getWidth()-1){
-            player.setLocation(1, getHeight()-97);
-            lvlOneObjects();
+        if(beginning = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 0){
             beginning = false;
             lvlOne = true;
+            player.setLocation(1, getHeight()-97);
+            lvlOneObjects();
         }
     }
     
     public void lvlTwo(){
         if(lvlOne = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 1){
-            player.setLocation(1, getHeight()-97);
-            lvlTwoObjects();
             lvlOne = false;
             lvlTwo = true;
+            player.setLocation(1, getHeight()-97);
+            lvlTwoObjects();
         }
     }
     
     public void lvlThree(){
-        if(lvlTwo = true && player.getX() >= getWidth()-1){
-            spawnDragon();
+        if(lvlTwo = true && player.getX() >= getWidth()-1 && player.getSpawnDragon() == 5){
+            lvlThreeObjects();
         }
     }
     
     public void lvlOneObjects(){
+        
         removeObject(txt);
         addObject(txt1, getWidth()/2, getHeight()/2);
         addObject(new Sword(), getWidth()/4, getHeight()-100);
@@ -183,12 +170,14 @@ public class MyWorld extends World
     }
     
     public void lvlTwoObjects(){
+        removeObject(txt1);
+        addObject(txt2, getWidth()/2, getHeight()/2);
         addObject(new Ground(), getWidth()/2, getHeight()-15);
         
-        addObject(new Platform(), 125, getHeight()/3);
-        addObject(new Platform(), getWidth()-125, getHeight()/3);
-        addObject(new Platform(), 200, getHeight() -160);
-        addObject(new Platform(), getWidth()-200, getHeight() -160);
+        addObject(platform1, 125, getHeight()/3);
+        addObject(platform2, getWidth()-125, getHeight()/3);
+        addObject(platform3, 200, getHeight() -160);
+        addObject(platform4, getWidth()-200, getHeight() -160);
         
         addObject(creature2, getWidth()/5, 106);
         addObject(creature3, getWidth()-140, 106);
@@ -197,8 +186,15 @@ public class MyWorld extends World
     }
     
     public void lvlThreeObjects(){
+        removeObject(txt2);
+        removeObject(platform1);
+        removeObject(platform2);
+        removeObject(platform4);
         for(int i = 0 ; i <= 3 ; i++){
             addObject(new Ground(), i*100, getHeight()-15);
         }
+        addObject(dragon, getWidth()-50, getHeight()/2);
+        addObject(new Bow(), getWidth()/4, getHeight()-100);
+        player.setSpawnDragon(0);
     }
 }
